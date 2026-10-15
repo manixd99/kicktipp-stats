@@ -2,92 +2,163 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tipprunde Champions League 2026/27</title>
 <meta name="description" content="Live-Statistiken unserer Kicktipp-Runde: Punkterennen, Platzierungen, Duelle und mehr.">
 <meta property="og:title" content="Tipprunde Champions League 2026/27">
-<meta property="og:description" content="Wer führt? Wer holt auf? Alle Statistiken unserer Kicktipp-Runde, automatisch aktuell.">
+<meta property="og:description" content="Wer führt? Wer holt auf? Alle Statistiken unserer Kicktipp-Runde, live während der Spiele.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0b1f4d">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%230b1f4d'/%3E%3Cpath d='M16 7l2.6 5.3 5.9.9-4.2 4.1 1 5.8L16 20.4l-5.3 2.7 1-5.8-4.2-4.1 5.9-.9z' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#070b1a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23070b1a'/%3E%3Cpath d='M16 6.5l2.8 5.7 6.3.9-4.55 4.45 1.07 6.25L16 20.8l-5.62 2.95 1.07-6.25L6.9 13.1l6.3-.9z' fill='%23f5c542'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f4f5f8; --panel: #ffffff; --fg: #12172b; --muted: #5d6478; --line: #e2e5ec;
-  --accent: #1d4ed8; --accent-soft: #e6edff; --gold: #c58b00; --bad: #c2410c; --good: #15803d;
-  --grid: #e9ebf0; --chip: #f0f2f6;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #0d1020; --panel: #161a2e; --fg: #eef0f7; --muted: #9aa1b8; --line: #272c45; --accent: #6b93ff; --accent-soft: #1d2650; --gold: #f2c14e; --bad: #fb923c; --good: #4ade80; --grid: #23283f; --chip: #1e2339; color-scheme: dark; }
+  --bg: #070b1a; --bg2: #0b1126; --panel: #0f1630; --panel2: #141c3b; --fg: #eef1fb; --muted: #8e98b8; --dim: #5b6588;
+  --line: rgba(255,255,255,.08); --line2: rgba(255,255,255,.14);
+  --gold: #f5c542; --silver: #c9d3e6; --bronze: #e0915a; --cyan: #4cc9f0; --good: #5be3a0; --bad: #ff7a7a;
+  --head: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
-.wrap { max-width: 1100px; margin: 0 auto; padding: 20px 16px 48px; }
-header.hero { background: #0b1f4d; color: #fff; border-radius: 16px; padding: 22px 22px 20px; position: relative; overflow: hidden; }
-header.hero::after { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; border: 28px solid rgba(255,255,255,.06); }
-.hero h1 { margin: 0; font-size: clamp(22px, 4.5vw, 30px); font-weight: 650; letter-spacing: -.01em; }
-.hero .stand { opacity: .75; font-size: 13px; margin-top: 2px; }
-.hero .take { margin-top: 12px; font-size: 16px; max-width: 60ch; }
-.hero .take b { color: #ffd76a; font-weight: 600; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 16px 0; }
-.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-.tile .l { font-size: 12px; color: var(--muted); text-transform: none; }
-.tile .v { font-size: 26px; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.2; margin: 4px 0 2px; overflow-wrap: anywhere; }
+html { background: var(--bg); }
+body {
+  margin: 0; color: var(--fg); font: 15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(1200px 500px at 50% -180px, rgba(76,201,240,.18), transparent 70%),
+    radial-gradient(600px 300px at 90% 0, rgba(245,197,66,.08), transparent 70%),
+    var(--bg);
+  min-height: 100vh;
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 18px 16px 56px; }
+.num, .tab { font-variant-numeric: tabular-nums; }
+
+/* Kopf */
+.hero { position: relative; padding: 26px 4px 10px; }
+.hero::before { content: ""; position: absolute; inset: 0 -40px; pointer-events: none; opacity: .5;
+  background-image: radial-gradient(rgba(255,255,255,.55) 1px, transparent 1.2px); background-size: 34px 34px;
+  mask-image: radial-gradient(ellipse 60% 80% at 50% 0, #000 10%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse 60% 80% at 50% 0, #000 10%, transparent 70%); }
+.kicker { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+.live { display: none; align-items: center; gap: 6px; color: #08130d; background: var(--good); border-radius: 999px; padding: 2px 9px; letter-spacing: .06em; }
+.live.on { display: inline-flex; }
+.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #08130d; animation: puls 1.4s infinite; }
+@keyframes puls { 50% { opacity: .25; } }
+.hero h1 { font-family: var(--head); font-weight: 700; font-size: clamp(34px, 7vw, 60px); line-height: .95; margin: 10px 0 0; letter-spacing: .01em; text-transform: uppercase; }
+.hero h1 span { color: var(--gold); }
+.stand { color: var(--muted); font-size: 13px; margin-top: 10px; }
+.take { margin-top: 14px; font-size: 17px; max-width: 62ch; color: #d9def0; }
+.take b { color: var(--fg); font-weight: 700; background: linear-gradient(transparent 62%, rgba(245,197,66,.35) 62%); }
+
+/* Podest */
+.podium { display: grid; grid-template-columns: 1fr 1.12fr 1fr; gap: 10px; align-items: end; margin: 22px 0 8px; }
+.pod { position: relative; text-align: center; border-radius: 16px 16px 10px 10px; padding: 14px 8px 12px; background: linear-gradient(180deg, var(--panel2), var(--panel)); border: 1px solid var(--line); overflow: hidden; }
+.pod::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--m); }
+.pod .medal { width: 34px; height: 34px; margin: 0 auto 6px; border-radius: 50%; display: grid; place-items: center; font-family: var(--head); font-weight: 700; font-size: 19px; color: #10131d; background: var(--m); box-shadow: 0 0 0 4px color-mix(in srgb, var(--m) 22%, transparent); }
+.pod .n { font-weight: 700; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pod .p { font-family: var(--head); font-size: 34px; font-weight: 700; line-height: 1; margin-top: 4px; }
+.pod .p small { font-size: 14px; color: var(--muted); font-family: Inter, sans-serif; font-weight: 500; margin-left: 3px; }
+.pod .d { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.pod.r1 { padding-top: 22px; padding-bottom: 22px; background: linear-gradient(180deg, color-mix(in srgb, var(--gold) 16%, var(--panel2)), var(--panel)); }
+.pod.r1 .p { font-size: 44px; }
+.pod.r1 .crown { position: absolute; top: 8px; right: 10px; color: var(--gold); font-size: 16px; }
+
+/* Kacheln */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin: 12px 0 6px; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 13px 15px; }
+.tile .l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; font-weight: 600; }
+.tile .v { font-family: var(--head); font-size: 30px; font-weight: 700; line-height: 1.1; margin: 5px 0 1px; overflow-wrap: anywhere; }
 .tile .s { font-size: 12px; color: var(--muted); }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 14px; }
-.card h2 { margin: 0; font-size: 17px; font-weight: 650; }
-.card .note { color: var(--muted); font-size: 13px; margin: 2px 0 12px; }
-.controls { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; margin: 0 -4px; display: flex; flex-direction: column; gap: 10px; }
-.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 0 4px; }
-.seg { display: inline-flex; background: var(--chip); border-radius: 10px; padding: 3px; flex-wrap: wrap; }
-.seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 13px; padding: 6px 11px; border-radius: 8px; cursor: pointer; }
-.seg button.on { background: var(--panel); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.12); font-weight: 600; }
-label.sel { font-size: 13px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
-select { font: inherit; font-size: 13px; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; }
+.tile .v.gold { color: var(--gold); } .tile .v.good { color: var(--good); }
+
+/* Steuerung */
+.controls { position: sticky; top: 0; z-index: 10; margin: 14px -16px 0; padding: 10px 16px; display: flex; flex-direction: column; gap: 10px;
+  background: rgba(7,11,26,.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 3px; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 500; padding: 7px 12px; border-radius: 9px; cursor: pointer; transition: background .15s, color .15s; }
+.seg button:hover { color: var(--fg); }
+.seg button.on { background: var(--fg); color: var(--bg); font-weight: 650; }
+label.sel { font-size: 12px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+select { font: inherit; font-size: 13px; color: var(--fg); background: var(--panel); border: 1px solid var(--line2); border-radius: 9px; padding: 6px 8px; text-transform: none; letter-spacing: 0; font-weight: 500; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font: inherit; font-size: 13px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); border-radius: 999px; padding: 4px 10px 4px 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-.chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
-.chip.on { color: var(--fg); border-color: currentColor; }
-.chip.on { border-color: var(--c); }
-.chip.on i { background: var(--c); }
-.mini { font: inherit; font-size: 12px; border: 0; background: none; color: var(--accent); cursor: pointer; padding: 4px 6px; }
-.chartbox { position: relative; height: 360px; }
-@media (max-width: 600px) { .chartbox { height: 300px; } .hide-sm { display: none; } .controls { position: static; } }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px; }
-.grid2 .card { margin-top: 14px; }
-.duel-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
-.duel-sum { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; text-align: center; margin: 4px 0 10px; }
-.duel-sum .n { font-size: 13px; color: var(--muted); }
-.duel-sum .p { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.duel-sum .vs { font-size: 12px; color: var(--muted); }
-.scroll { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
-th { text-align: left; font-size: 12px; font-weight: 600; color: var(--muted); padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-th.sort { cursor: pointer; user-select: none; }
-th.sort[aria-sort=ascending]::after { content: " ▲"; } th.sort[aria-sort=descending]::after { content: " ▼"; }
-td { padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-.num { text-align: right; }
-tr.hl td { background: var(--accent-soft); }
-.heat td.c { text-align: center; min-width: 38px; border: 2px solid var(--panel); border-radius: 6px; }
-.heat td.best { outline: 2px solid var(--gold); outline-offset: -2px; font-weight: 700; }
-.badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 6px; background: var(--chip); color: var(--muted); margin-left: 6px; }
-.up { color: var(--good); } .down { color: var(--bad); }
-footer { color: var(--muted); font-size: 12px; margin-top: 24px; text-align: center; }
-footer a { color: inherit; }
+.chip { font: inherit; font-size: 13px; font-weight: 500; border: 1px solid var(--line2); background: transparent; color: var(--dim); border-radius: 999px; padding: 4px 11px 4px 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all .15s; }
+.chip i { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 10px; font-weight: 700; background: rgba(255,255,255,.07); color: var(--dim); }
+.chip.on { color: var(--fg); border-color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); }
+.chip.on i { background: var(--c); color: #0a0e1c; }
+.mini { font: inherit; font-size: 12px; font-weight: 600; border: 0; background: none; color: var(--cyan); cursor: pointer; padding: 4px 6px; }
 .share { margin-left: auto; }
-.share button { font: inherit; font-size: 13px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
-.err { background: var(--panel); border: 1px solid var(--bad); color: var(--bad); padding: 16px; border-radius: 12px; margin-top: 16px; display: none; }
+.share button { font: inherit; font-size: 13px; font-weight: 600; border: 0; background: var(--gold); color: #1a1405; border-radius: 9px; padding: 7px 12px; cursor: pointer; }
+
+/* Karten */
+.card { background: linear-gradient(180deg, var(--panel2), var(--panel) 120px); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin-top: 14px; }
+.card h2 { margin: 0; font-family: var(--head); font-size: 24px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; }
+.card .note { color: var(--muted); font-size: 13px; margin: 2px 0 14px; }
+.chartbox { position: relative; height: 400px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 14px; }
+.grid2 .card { margin-top: 14px; }
+
+/* Duell */
+.duel-head { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; }
+.duel-head select { width: 100%; }
+.duel-head .vs { font-family: var(--head); font-weight: 700; color: var(--muted); font-size: 18px; }
+.duel-sum { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; text-align: center; margin: 14px 0 6px; }
+.duel-sum .p { font-family: var(--head); font-size: 52px; font-weight: 700; line-height: 1; }
+.duel-sum .n { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.duel-sum .mid { font-size: 12px; color: var(--muted); }
+.duel-bar { height: 8px; border-radius: 99px; overflow: hidden; display: flex; margin: 6px 0 14px; background: var(--panel2); }
+.duel-bar span { display: block; height: 100%; transition: width .4s; }
+
+/* Tabellen */
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { border-collapse: separate; border-spacing: 0; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th { text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); padding: 8px; border-bottom: 1px solid var(--line2); white-space: nowrap; text-transform: uppercase; letter-spacing: .06em; }
+th.sort { cursor: pointer; user-select: none; }
+th.sort:hover { color: var(--fg); }
+th.sort[aria-sort] { color: var(--gold); }
+th.sort[aria-sort=ascending]::after { content: " ↑"; } th.sort[aria-sort=descending]::after { content: " ↓"; }
+td { padding: 9px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+tbody tr:hover td { background: rgba(255,255,255,.025); }
+.num { text-align: right; }
+.rk { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font-weight: 700; font-size: 12px; background: rgba(255,255,255,.06); color: var(--muted); }
+.rk.g { background: var(--gold); color: #1a1405; } .rk.s { background: var(--silver); color: #141820; } .rk.b { background: var(--bronze); color: #1d1007; }
+.who { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.who i { width: 10px; height: 10px; border-radius: 50%; background: var(--dim); }
+.pts { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+.pts .bar { width: 70px; height: 6px; border-radius: 99px; background: rgba(255,255,255,.06); overflow: hidden; }
+.pts .bar span { display: block; height: 100%; border-radius: 99px; background: var(--cyan); }
+.pts b { font-weight: 700; min-width: 2.5ch; text-align: right; }
+.up { color: var(--good); font-weight: 600; } .down { color: var(--bad); font-weight: 600; } .x { color: var(--dim); }
+.heat th, .heat td { text-align: center; }
+.heat td.nm, .heat th.nm { text-align: left; }
+.heat td.c { min-width: 42px; padding: 0; height: 34px; border: 3px solid transparent; background-clip: padding-box; border-radius: 9px; font-weight: 600; }
+.heat td.best { box-shadow: inset 0 0 0 2px var(--gold); color: var(--gold) !important; font-weight: 800; }
+
+footer { color: var(--dim); font-size: 12px; margin-top: 28px; text-align: center; }
+footer a { color: var(--muted); }
+.err { background: var(--panel); border: 1px solid var(--bad); color: var(--bad); padding: 16px; border-radius: 14px; margin-top: 16px; display: none; }
+
+@media (max-width: 600px) {
+  .chartbox { height: 340px; }
+  .hide-sm { display: none; }
+  .controls { position: static; margin: 14px 0 0; padding: 0; background: none; backdrop-filter: none; border: 0; }
+  .podium { gap: 6px; } .pod .p { font-size: 26px; } .pod.r1 .p { font-size: 34px; } .pod .n { font-size: 13px; }
+  .card { padding: 14px; border-radius: 16px; }
+  .pts .bar { display: none; }
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="hero">
-    <h1>Tipprunde Champions League 2026/27</h1>
+    <div class="kicker"><span class="live" id="live">Live</span><span>Kicktipp · Tipprunde</span></div>
+    <h1>Champions League <span>2026/27</span></h1>
     <div class="stand" id="stand">Lade Daten …</div>
     <div class="take" id="take">&nbsp;</div>
   </header>
   <div class="err" id="err"></div>
 
+  <div class="podium" id="podium"></div>
   <div class="tiles" id="tiles"></div>
 
   <div class="controls">
@@ -95,8 +166,8 @@ footer a { color: inherit; }
       <div class="seg" id="view">
         <button data-v="kum" class="on">Punkte gesamt</button>
         <button data-v="platz">Platzierung</button>
-        <button data-v="rueck">Rückstand zur Spitze</button>
-        <button data-v="tag">Punkte je Spieltag</button>
+        <button data-v="rueck">Rückstand</button>
+        <button data-v="tag">Pro Spieltag</button>
       </div>
       <label class="sel">von <select id="von"></select></label>
       <label class="sel">bis <select id="bis"></select></label>
@@ -120,213 +191,325 @@ footer a { color: inherit; }
     <div class="card">
       <h2>Duell</h2>
       <div class="note">Zwei Tipper im direkten Vergleich, Spieltag für Spieltag.</div>
-      <div class="duel-head">
-        <select id="d1"></select><span class="vs">gegen</span><select id="d2"></select>
-      </div>
+      <div class="duel-head"><select id="d1"></select><span class="vs">VS</span><select id="d2"></select></div>
       <div class="duel-sum" id="duel-sum"></div>
-      <div class="chartbox" style="height:240px"><canvas id="duel" aria-label="Duell-Diagramm"></canvas></div>
+      <div class="duel-bar" id="duel-bar"></div>
+      <div class="chartbox" style="height:260px"><canvas id="duel" aria-label="Duell-Diagramm"></canvas></div>
     </div>
     <div class="card">
-      <h2>Punkte je Spieltag</h2>
-      <div class="note">Je kräftiger, desto mehr Punkte. Gold umrandet: Tagessieger.</div>
+      <h2>Spieltags-Heatmap</h2>
+      <div class="note">Je heller, desto mehr Punkte. Gold umrandet: Tagessieger.</div>
       <div class="scroll"><table class="heat" id="heat"></table></div>
     </div>
   </div>
 
   <div class="card">
-    <h2>Tabelle im gewählten Bereich</h2>
-    <div class="note">Spaltenköpfe antippen zum Sortieren. Konstanz = Schwankung der Spieltagspunkte (kleiner ist gleichmäßiger).</div>
+    <h2>Tabelle</h2>
+    <div class="note">Im gewählten Zeitraum. Spaltenköpfe antippen zum Sortieren. Konstanz = Schwankung der Spieltagspunkte, kleiner ist gleichmäßiger.</div>
     <div class="scroll"><table id="tab"></table></div>
   </div>
 
-  <footer>Daten: <a id="src" href="#" target="_blank" rel="noopener">kicktipp.de</a> · aktualisiert sich an Spieltagen alle paar Minuten, auch während der Spiele</footer>
+  <footer>Daten: <a id="src" href="#" target="_blank" rel="noopener">kicktipp.de</a> · an Spieltagen alle paar Minuten aktualisiert, auch während der Spiele</footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-const PAL = ['#2563eb', '#ea580c', '#16a34a', '#d97706', '#db2777', '#7c3aed', '#0891b2', '#dc2626'];
+// 12 gut unterscheidbare Farben; jeder Tipper behält seine Farbe, egal wie er gerade steht.
+const PAL = ['#4cc9f0', '#f5c542', '#ff6b6b', '#5be3a0', '#b18cff', '#ff9a4d', '#e9eef7', '#f472b6', '#a3e635', '#5b8cff', '#c99a6e', '#14b8a6'];
+const naehe = (a, b) => { const h = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16)); const [x, y] = [h(a), h(b)]; return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]); };
 const $ = (s) => document.querySelector(s);
-const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const fmt1 = (x) => x.toLocaleString('de-AT', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const S = { view: 'kum', von: 0, bis: 0, sel: [], sort: { key: 'punkte', dir: -1 }, d1: null, d2: null };
-let D, charts = {};
+let D, charts = {}, FARBE = {};
+const kurz = (n, max = 12) => (n.length > max ? n.slice(0, max - 1) + '…' : n);
+const initial = (n) => n.replace(/[^\p{L}\p{N}]/gu, '').slice(0, 1).toUpperCase();
 
-function rang(werte) { // gleiche Punkte -> gleicher Platz
-  const sorted = [...werte].sort((a, b) => b - a);
-  return werte.map((w) => sorted.indexOf(w) + 1);
+function farbenVergeben() {
+  [...D.spieler.map((p) => p.name)].sort((a, b) => a.localeCompare(b, 'de')).forEach((n, i) => { FARBE[n] = PAL[i % PAL.length]; });
 }
+const farbe = (n) => (S.sel.includes(n) ? FARBE[n] : null);
+
+function rang(werte) { const s = [...werte].sort((a, b) => b - a); return werte.map((w) => s.indexOf(w) + 1); }
 
 function berechne() {
   const idx = D.gespielt.filter((i) => i >= S.von && i <= S.bis);
   const P = D.spieler.map((p) => {
     const tage = idx.map((i) => p.punkte[i] ?? 0);
     let s = 0; const kum = tage.map((v) => (s += v));
-    const summe = s, n = tage.length || 1, schnitt = summe / n;
+    const n = tage.length || 1, schnitt = s / n;
     const sd = Math.sqrt(tage.reduce((a, v) => a + (v - schnitt) ** 2, 0) / n);
-    return { name: p.name, tage, kum, summe, schnitt, bester: Math.max(0, ...tage), sd, bonus: p.bonus, gesamt: p.gesamt };
+    return { name: p.name, tage, kum, summe: s, schnitt, bester: Math.max(0, ...tage), sd, bonus: p.bonus, gesamt: p.gesamt };
   });
   const platzVerlauf = idx.map((_, k) => rang(P.map((p) => p.kum[k])));
-  const rueck = idx.map((_, k) => Math.max(...P.map((p) => p.kum[k])));
+  const spitze = idx.map((_, k) => Math.max(...P.map((p) => p.kum[k])));
   const tagesMax = idx.map((_, k) => Math.max(...P.map((p) => p.tage[k])));
   P.forEach((p, j) => {
     p.platz = platzVerlauf.map((r) => r[j]);
-    p.rueck = rueck.map((m, k) => m - p.kum[k]);
+    p.rueck = spitze.map((m, k) => m - p.kum[k]);
     p.siege = p.tage.filter((v, k) => v === tagesMax[k]).length;
-    p.trend = idx.length > 1 ? p.platz[p.platz.length - 2] - p.platz[p.platz.length - 1] : 0;
+    p.trend = idx.length > 1 ? p.platz.at(-2) - p.platz.at(-1) : 0;
   });
-  const rg = rang(P.map((p) => p.summe));
-  P.forEach((p, j) => { p.rang = rg[j]; p.rueckstand = Math.max(...P.map((q) => q.summe)) - p.summe; });
+  const rg = rang(P.map((p) => p.summe)), max = Math.max(...P.map((p) => p.summe));
+  P.forEach((p, j) => { p.rang = rg[j]; p.rueckstand = max - p.summe; });
+  P.sort((a, b) => a.rang - b.rang || a.name.localeCompare(b.name, 'de'));
   return { idx, P, labels: idx.map((i) => D.runden[i]), tagesMax };
 }
 
-function farbe(name) { const i = S.sel.indexOf(name); return i < 0 ? null : PAL[i % PAL.length]; }
+// ---------- Chart-Plugins: Namen direkt an Linien und in Balken ----------
+function pill(ctx, x, y, text, bg) {
+  ctx.font = '600 12px Inter, system-ui, sans-serif';
+  const w = ctx.measureText(text).width + 14, h = 20;
+  ctx.fillStyle = bg; ctx.beginPath(); ctx.roundRect(x, y - h / 2, w, h, 10); ctx.fill();
+  ctx.fillStyle = '#0a0e1c'; ctx.textBaseline = 'middle'; ctx.textAlign = 'left'; ctx.fillText(text, x + 7, y + 0.5);
+}
+const endLabels = {
+  id: 'endLabels',
+  afterDatasetsDraw(chart) {
+    if (chart.config.type !== 'line') return;
+    const { ctx, chartArea } = chart;
+    const items = [];
+    chart.data.datasets.forEach((ds, i) => {
+      if (ds._muted || !chart.isDatasetVisible(i)) return;
+      const pt = chart.getDatasetMeta(i).data.at(-1); if (!pt) return;
+      items.push({ x: pt.x, y: pt.y, y0: pt.y, text: ds._label, c: ds.borderColor });
+    });
+    items.sort((a, b) => a.y - b.y);
+    const gap = 22;
+    for (let k = 1; k < items.length; k++) if (items[k].y - items[k - 1].y < gap) items[k].y = items[k - 1].y + gap;
+    const over = items.length ? items.at(-1).y - (chartArea.bottom - 8) : 0;
+    if (over > 0) items.forEach((it) => (it.y -= over));
+    for (let k = 0; k < items.length; k++) if (items[k].y < chartArea.top + 8) items[k].y = chartArea.top + 8;
+    ctx.save();
+    items.forEach((it) => {
+      ctx.strokeStyle = it.c; ctx.lineWidth = 1.25; ctx.globalAlpha = 0.7;
+      ctx.beginPath(); ctx.moveTo(it.x + 5, it.y0); ctx.lineTo(it.x + 12, it.y); ctx.stroke(); ctx.globalAlpha = 1;
+      pill(ctx, it.x + 12, it.y, it.text, it.c);
+    });
+    ctx.restore();
+  },
+};
+const barLabels = {
+  id: 'barLabels',
+  afterDatasetsDraw(chart) {
+    if (chart.config.type !== 'bar') return;
+    const { ctx } = chart;
+    ctx.save();
+    chart.data.datasets.forEach((ds, i) => {
+      chart.getDatasetMeta(i).data.forEach((bar, j) => {
+        const v = ds.data[j]; const { x, y, base, width } = bar.getProps(['x', 'y', 'base', 'width'], true);
+        const h = base - y;
+        ctx.fillStyle = '#eef1fb'; ctx.font = '700 11px Inter, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+        if (width >= 14) ctx.fillText(v, x, y - 3);
+        ctx.font = '600 11px Inter, system-ui, sans-serif';
+        const t = kurz(ds._label, 14), tw = ctx.measureText(t).width;
+        if (width >= 13 && h >= tw + 10) {
+          ctx.save(); ctx.translate(x, base - 6); ctx.rotate(-Math.PI / 2);
+          ctx.fillStyle = '#0a0e1c'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(t, 0, 0.5); ctx.restore();
+        } else if (width >= 13 && h >= 14) {
+          ctx.fillStyle = '#0a0e1c'; ctx.textBaseline = 'bottom'; ctx.textAlign = 'center'; ctx.fillText(initial(ds._label), x, base - 3);
+        }
+      });
+    });
+    ctx.restore();
+  },
+};
+Chart.register(endLabels, barLabels);
+Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
+Chart.defaults.color = '#8e98b8';
 
+function achsen(y) {
+  return {
+    x: { grid: { display: false }, border: { color: 'rgba(255,255,255,.14)' }, ticks: { color: '#8e98b8', font: { weight: 600 } } },
+    y: { grid: { color: 'rgba(255,255,255,.06)' }, border: { display: false }, ticks: { color: '#5b6588', precision: 0 }, ...y },
+  };
+}
+const tooltip = {
+  backgroundColor: '#141c3b', borderColor: 'rgba(255,255,255,.14)', borderWidth: 1, padding: 10, cornerRadius: 10,
+  titleColor: '#eef1fb', titleFont: { weight: 700 }, bodyColor: '#d9def0', boxPadding: 4, usePointStyle: true,
+};
+
+// ---------- Bausteine ----------
 function kopf(R) {
-  const top = [...R.P].sort((a, b) => a.rang - b.rang);
-  const a = top[0], b = top[1];
-  const letzter = R.idx.length - 1;
-  const tagSieger = R.P.filter((p) => p.tage[letzter] === R.tagesMax[letzter]);
-  const aufsteiger = [...R.P].sort((x, y) => y.trend - x.trend)[0];
   standZeile();
   const take = $('#take'); take.replaceChildren();
   const add = (t, bold) => { const e = document.createElement(bold ? 'b' : 'span'); e.textContent = t; take.append(e); };
   if (!R.idx.length) { add('Noch keine Spieltage im gewählten Bereich.'); return; }
+  const [a, b] = R.P, k = R.idx.length - 1;
+  const sieger = R.P.filter((p) => p.tage[k] === R.tagesMax[k]);
   add(a.name, 1); add(` führt mit ${a.summe} Punkten`);
   if (b) { add(a.summe === b.summe ? ', punktgleich mit ' : `, ${a.summe - b.summe} vor `); add(b.name, 1); }
-  add('. Spieltag ' + R.labels[letzter] + ' ging an '); add(tagSieger.map((p) => p.name).join(' und '), 1);
-  add(` (${R.tagesMax[letzter]} Punkte).`);
+  add(`. Spieltag ${R.labels[k]} ging an `); add(sieger.map((p) => p.name).join(' und '), 1); add(` mit ${R.tagesMax[k]} Punkten.`);
 
+  const pod = $('#podium'); pod.replaceChildren();
+  const medal = { 1: ['var(--gold)', 'r1'], 2: ['var(--silver)', 'r2'], 3: ['var(--bronze)', 'r3'] };
+  [R.P[1], R.P[0], R.P[2]].forEach((p) => {
+    if (!p) return;
+    const r = Math.min(p.rang, 3), el = document.createElement('div');
+    el.className = 'pod ' + medal[r][1]; el.style.setProperty('--m', medal[r][0]);
+    el.innerHTML = `${r === 1 ? '<span class="crown">★</span>' : ''}<div class="medal"></div><div class="n"></div><div class="p"></div><div class="d"></div>`;
+    el.querySelector('.medal').textContent = p.rang;
+    el.querySelector('.n').textContent = p.name;
+    el.querySelector('.p').innerHTML = `${p.summe}<small>Pkt.</small>`;
+    el.querySelector('.d').textContent = p.rueckstand ? `−${p.rueckstand} zur Spitze` : `Ø ${fmt1(p.schnitt)} pro Spieltag`;
+    pod.append(el);
+  });
+
+  const m = Math.max(...R.tagesMax), mk = R.tagesMax.indexOf(m);
+  const auf = [...R.P].sort((x, y) => y.trend - x.trend)[0];
+  const konst = [...R.P].sort((x, y) => x.sd - y.sd)[0];
   const tiles = [
-    ['Spitzenreiter', a.name, `${a.summe} Punkte`],
-    ['Vorsprung auf Platz 2', b ? String(a.summe - b.summe) : '–', b ? `Punkte vor ${b.name}` : ''],
-    ['Bester Einzelspieltag', String(Math.max(...R.tagesMax)), (() => { const m = Math.max(...R.tagesMax); const k = R.tagesMax.indexOf(m); return R.P.filter((p) => p.tage[k] === m).map((p) => p.name).join(', ') + ', Spieltag ' + R.labels[k]; })()],
-    ['Aufsteiger des Spieltags', aufsteiger && aufsteiger.trend > 0 ? aufsteiger.name : '–', aufsteiger && aufsteiger.trend > 0 ? `+${aufsteiger.trend} Plätze, jetzt ${aufsteiger.platz.at(-1)}.` : 'Keine Bewegung'],
-    ['Ø Punkte pro Spieltag', fmt1(R.P.reduce((s, p) => s + p.summe, 0) / R.P.length / R.idx.length), 'über alle Tipper'],
+    ['Bester Spieltag', m, R.P.filter((p) => p.tage[mk] === m).map((p) => p.name).join(', ') + ` · ST ${R.labels[mk]}`, 'gold'],
+    ['Aufsteiger', auf && auf.trend > 0 ? auf.name : '–', auf && auf.trend > 0 ? `+${auf.trend} Plätze, jetzt ${auf.platz.at(-1)}.` : 'keine Bewegung', 'good'],
+    ['Konstantester', R.idx.length > 1 ? konst.name : '–', R.idx.length > 1 ? `schwankt nur ±${fmt1(konst.sd)} Punkte` : 'ab 2 Spieltagen'],
+    ['Ø pro Spieltag', fmt1(R.P.reduce((s, p) => s + p.summe, 0) / R.P.length / R.idx.length), `alle ${R.P.length} Tipper`],
   ];
-  $('#tiles').replaceChildren(...tiles.map(([l, v, s]) => {
+  $('#tiles').replaceChildren(...tiles.map(([l, v, s, c]) => {
     const t = document.createElement('div'); t.className = 'tile';
-    t.innerHTML = '<div class="l"></div><div class="v"></div><div class="s"></div>';
+    t.innerHTML = `<div class="l"></div><div class="v ${c || ''}"></div><div class="s"></div>`;
     t.children[0].textContent = l; t.children[1].textContent = v; t.children[2].textContent = s; return t;
   }));
 }
 
 function chips(R) {
-  const names = [...R.P].sort((a, b) => a.rang - b.rang).map((p) => p.name);
-  $('#chips').replaceChildren(...names.map((n) => {
-    const b = document.createElement('button'); const c = farbe(n);
-    b.className = 'chip' + (c ? ' on' : ''); if (c) b.style.setProperty('--c', c);
-    b.innerHTML = '<i></i>'; b.append(document.createTextNode(n));
-    b.onclick = () => { S.sel.includes(n) ? S.sel.splice(S.sel.indexOf(n), 1) : S.sel.push(n); render(); };
+  $('#chips').replaceChildren(...R.P.map((p) => {
+    const n = p.name, b = document.createElement('button'), on = S.sel.includes(n);
+    b.className = 'chip' + (on ? ' on' : ''); b.style.setProperty('--c', FARBE[n]);
+    const i = document.createElement('i'); i.textContent = p.rang; b.append(i, document.createTextNode(n));
+    b.onclick = () => { on ? S.sel.splice(S.sel.indexOf(n), 1) : S.sel.push(n); render(); };
     return b;
   }));
 }
 
-function achsen(extra) {
-  const g = css('--grid'), m = css('--muted');
-  return { x: { grid: { display: false }, ticks: { color: m } }, y: { grid: { color: g }, ticks: { color: m, precision: 0 }, ...extra } };
-}
-
 function hauptChart(R) {
-  const titel = { kum: ['Punkterennen', 'Punkte kumuliert ab dem gewählten Spieltag. Graue Linien: alle übrigen Tipper.'],
-    platz: ['Platzierungsverlauf', 'Tabellenplatz nach jedem Spieltag (gleiche Punkte = gleicher Platz).'],
-    rueck: ['Rückstand zur Spitze', 'Wie viele Punkte jeder Tipper hinter dem jeweils Führenden lag. 0 = Spitze.'],
-    tag: ['Punkte je Spieltag', 'Punkte der ausgewählten Tipper an jedem Spieltag.'] }[S.view];
-  $('#chart-title').textContent = titel[0]; $('#chart-note').textContent = titel[1];
+  const T = {
+    kum: ['Punkterennen', 'Punkte aufsummiert ab dem gewählten Spieltag. Graue Linien: alle übrigen Tipper.'],
+    platz: ['Platzierungsverlauf', 'Tabellenplatz nach jedem Spieltag. Gleiche Punkte bedeuten gleichen Platz.'],
+    rueck: ['Rückstand zur Spitze', 'Wie viele Punkte jeder hinter dem jeweils Führenden lag. 0 heißt: an der Spitze.'],
+    tag: ['Punkte pro Spieltag', 'Was die ausgewählten Tipper an jedem einzelnen Spieltag geholt haben.'],
+  }[S.view];
+  $('#chart-title').textContent = T[0]; $('#chart-note').textContent = T[1];
   const key = { kum: 'kum', platz: 'platz', rueck: 'rueck', tag: 'tage' }[S.view];
-  const muted = css('--line');
-  const sel = R.P.filter((p) => farbe(p.name)).sort((a, b) => S.sel.indexOf(a.name) - S.sel.indexOf(b.name));
-  const rest = S.view === 'tag' ? [] : R.P.filter((p) => !farbe(p.name));
+  const sel = R.P.filter((p) => S.sel.includes(p.name));
+  const rest = S.view === 'tag' ? [] : R.P.filter((p) => !S.sel.includes(p.name));
+  const schmal = innerWidth < 600;
+  const lab = (p) => {
+    const v = p[key].at(-1), n = kurz(p.name, schmal ? 9 : 14);
+    return S.view === 'platz' ? `${v}. ${n}` : S.view === 'rueck' ? `${n} ${v ? '−' + v : '★'}` : `${n} ${v}`;
+  };
   const ds = [
-    ...sel.map((p) => ({ label: p.name, data: p[key], borderColor: farbe(p.name), backgroundColor: farbe(p.name), borderWidth: 2.5, pointRadius: R.idx.length < 12 ? 3 : 0, tension: 0, order: 0, borderRadius: 4, maxBarThickness: 28 })),
-    ...rest.map((p) => ({ label: p.name, data: p[key], borderColor: muted, backgroundColor: muted, borderWidth: 1.25, pointRadius: 0, tension: 0, order: 1, _muted: true })),
+    ...sel.map((p) => ({ label: p.name, _label: S.view === 'tag' ? p.name : lab(p), data: p[key], borderColor: FARBE[p.name], backgroundColor: FARBE[p.name],
+      pointBackgroundColor: FARBE[p.name], pointBorderColor: '#0f1630', pointBorderWidth: 2, borderWidth: S.view === 'tag' ? 0 : 3, pointRadius: R.idx.length < 14 ? 4 : 0, pointHoverRadius: 6,
+      tension: 0, order: 0, borderRadius: 6, borderSkipped: 'start', maxBarThickness: 34, categoryPercentage: 0.8, barPercentage: 0.92 })),
+    ...rest.map((p) => ({ label: p.name, data: p[key], borderColor: 'rgba(142,152,184,.22)', borderWidth: 1.5, pointRadius: 0, pointHoverRadius: 0, tension: 0, order: 1, _muted: true })),
   ];
-  const y = S.view === 'platz' ? { reverse: true, min: 1, max: R.P.length, ticks: { color: css('--muted'), stepSize: 1 } } : { beginAtZero: true };
+  // Platz rechts für die Namensschilder freihalten
+  const mc = document.createElement('canvas').getContext('2d'); mc.font = '600 12px Inter, system-ui, sans-serif';
+  const rechts = S.view === 'tag' ? 8 : Math.min(innerWidth * 0.42, Math.max(0, ...ds.filter((d) => !d._muted).map((d) => mc.measureText(d._label).width)) + 30);
+  const y = S.view === 'platz' ? { reverse: true, min: 0.5, max: R.P.length + 0.5, afterBuildTicks: (ax) => { ax.ticks = Array.from({ length: R.P.length }, (_, i) => ({ value: i + 1 })); }, ticks: { color: '#5b6588', callback: (v) => v + '.' } }
+    : { beginAtZero: true, grace: S.view === 'tag' ? '8%' : 0 };
   charts.main?.destroy();
   charts.main = new Chart($('#main'), {
     type: S.view === 'tag' ? 'bar' : 'line',
     data: { labels: R.labels.map((l) => (/^\d+$/.test(l) ? 'ST ' + l : l)), datasets: ds },
     options: {
-      responsive: true, maintainAspectRatio: false, animation: { duration: 300 },
+      responsive: true, maintainAspectRatio: false, animation: { duration: 350 },
+      layout: { padding: { right: rechts, top: 14 } },
       interaction: { mode: 'index', intersect: false },
       plugins: { legend: { display: false },
-        tooltip: { filter: (t) => !t.dataset._muted, itemSort: (a, b) => (S.view === 'platz' || S.view === 'rueck' ? a.raw - b.raw : b.raw - a.raw),
-          callbacks: { label: (t) => ` ${t.dataset.label}: ${S.view === 'platz' ? t.raw + '. Platz' : t.raw + (S.view === 'rueck' ? ' Pkt. zurück' : ' Pkt.')}` } } },
+        tooltip: { ...tooltip, filter: (t) => !t.dataset._muted,
+          itemSort: (a, b) => (S.view === 'platz' || S.view === 'rueck' ? a.raw - b.raw : b.raw - a.raw),
+          callbacks: { label: (t) => ` ${t.dataset.label}: ${S.view === 'platz' ? t.raw + '. Platz' : S.view === 'rueck' ? (t.raw ? '−' + t.raw : 'Spitze') : t.raw + ' Pkt.'}`,
+            labelColor: (t) => ({ borderColor: t.dataset.borderColor, backgroundColor: t.dataset.borderColor }) } } },
       scales: achsen(y),
     },
   });
 }
 
 function duell(R) {
-  const names = [...R.P].sort((a, b) => a.rang - b.rang).map((p) => p.name);
-  if (!names.includes(S.d1)) S.d1 = names[0]; if (!names.includes(S.d2) || S.d2 === S.d1) S.d2 = names.find((n) => n !== S.d1);
-  for (const [id, k] of [['#d1', 'd1'], ['#d2', 'd2']]) {
-    const s = $(id); s.replaceChildren(...names.map((n) => new Option(n, n))); s.value = S[k];
-  }
+  const names = R.P.map((p) => p.name);
+  if (!names.includes(S.d1)) S.d1 = names[0];
+  if (!names.includes(S.d2) || S.d2 === S.d1) S.d2 = names.find((n) => n !== S.d1);
+  for (const [id, k] of [['#d1', 'd1'], ['#d2', 'd2']]) { const s = $(id); s.replaceChildren(...names.map((n) => new Option(n, n))); s.value = S[k]; }
   const a = R.P.find((p) => p.name === S.d1), b = R.P.find((p) => p.name === S.d2);
+  const ca = FARBE[a.name], cb = naehe(ca, FARBE[b.name]) < 110 ? (naehe(ca, '#e9eef7') < 110 ? '#ff6b6b' : '#e9eef7') : FARBE[b.name];
   let wa = 0, wb = 0; a.tage.forEach((v, k) => { if (v > b.tage[k]) wa++; else if (v < b.tage[k]) wb++; });
-  const box = $('#duel-sum'); box.innerHTML = '<div><div class="p"></div><div class="n"></div></div><div class="vs"></div><div><div class="p"></div><div class="n"></div></div>';
-  box.children[0].children[0].textContent = a.summe; box.children[0].children[1].textContent = `${a.name} · ${wa} Tagessiege`;
-  box.children[2].children[0].textContent = b.summe; box.children[2].children[1].textContent = `${b.name} · ${wb} Tagessiege`;
-  box.children[1].textContent = a.tage.length - wa - wb ? `${a.tage.length - wa - wb}× remis` : 'gegen';
-  box.children[0].children[0].style.color = PAL[0]; box.children[2].children[0].style.color = PAL[1];
+  const box = $('#duel-sum');
+  box.innerHTML = '<div><div class="p"></div><div class="n"></div></div><div class="mid"></div><div><div class="p"></div><div class="n"></div></div>';
+  box.children[0].children[0].textContent = a.summe; box.children[0].children[0].style.color = ca;
+  box.children[0].children[1].textContent = `${wa} Tagessieg${wa === 1 ? '' : 'e'}`;
+  box.children[2].children[0].textContent = b.summe; box.children[2].children[0].style.color = cb;
+  box.children[2].children[1].textContent = `${wb} Tagessieg${wb === 1 ? '' : 'e'}`;
+  const remis = a.tage.length - wa - wb;
+  box.children[1].textContent = a.summe === b.summe ? 'Gleichstand' : `${Math.abs(a.summe - b.summe)} Pkt. ${a.summe > b.summe ? '◀' : '▶'}${remis ? ` · ${remis}× remis` : ''}`;
+  const sum = a.summe + b.summe || 1;
+  $('#duel-bar').innerHTML = `<span style="width:${(a.summe / sum) * 100}%;background:${ca}"></span><span style="width:${(b.summe / sum) * 100}%;background:${cb}"></span>`;
   charts.duel?.destroy();
   charts.duel = new Chart($('#duel'), {
     type: 'bar',
-    data: { labels: R.labels, datasets: [a, b].map((p, i) => ({ label: p.name, data: p.tage, backgroundColor: PAL[i], borderRadius: 4, maxBarThickness: 22 })) },
-    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 300 }, interaction: { mode: 'index', intersect: false }, plugins: { legend: { display: false } }, scales: achsen({ beginAtZero: true }) },
+    data: { labels: R.labels.map((l) => (/^\d+$/.test(l) ? 'ST ' + l : l)), datasets: [[a, ca], [b, cb]].map(([p, c]) => ({ label: p.name, _label: p.name, data: p.tage, backgroundColor: c, borderRadius: 6, borderSkipped: 'start', maxBarThickness: 40, categoryPercentage: 0.7, barPercentage: 0.9 })) },
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 350 }, layout: { padding: { top: 14 } }, interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { display: false }, tooltip }, scales: achsen({ beginAtZero: true, grace: '8%' }) },
   });
 }
 
 function heat(R) {
-  const rows = [...R.P].sort((a, b) => a.rang - b.rang);
-  const all = R.P.flatMap((p) => p.tage); const lo = Math.min(...all), hi = Math.max(...all);
+  const all = R.P.flatMap((p) => p.tage), lo = Math.min(...all), hi = Math.max(...all);
   const t = $('#heat'); t.replaceChildren();
-  const tr0 = t.insertRow(); const th0 = document.createElement('th'); th0.textContent = 'Tipper'; tr0.append(th0);
-  R.labels.forEach((l) => { const th = document.createElement('th'); th.textContent = l; th.style.textAlign = 'center'; tr0.append(th); });
-  rows.forEach((p) => {
-    const tr = t.insertRow(); const n = tr.insertCell(); n.textContent = p.name;
+  const hr = t.createTHead().insertRow();
+  const th0 = document.createElement('th'); th0.className = 'nm'; th0.textContent = 'Tipper'; hr.append(th0);
+  R.labels.forEach((l) => { const th = document.createElement('th'); th.textContent = l; hr.append(th); });
+  const tb = t.createTBody();
+  R.P.forEach((p) => {
+    const tr = tb.insertRow(); const n = tr.insertCell(); n.className = 'nm';
+    n.innerHTML = '<span class="who"><i></i><span></span></span>'; n.querySelector('i').style.background = FARBE[p.name]; n.querySelector('span span').textContent = p.name;
     p.tage.forEach((v, k) => {
       const c = tr.insertCell(); c.className = 'c' + (v === R.tagesMax[k] ? ' best' : ''); c.textContent = v;
-      const pct = hi === lo ? 50 : Math.round(12 + 78 * (v - lo) / (hi - lo));
-      c.style.background = `color-mix(in srgb, var(--accent) ${pct}%, transparent)`;
-      if (pct > 55) c.style.color = '#fff';
+      const f = hi === lo ? 0.5 : (v - lo) / (hi - lo);
+      c.style.background = `rgba(76,201,240,${(0.06 + 0.6 * f).toFixed(2)})`;
+      c.style.color = f > 0.65 ? '#05121a' : '#eef1fb';
     });
   });
 }
 
 const SPALTEN = [
-  ['rang', 'Platz', (p) => p.rang + '.', 1], ['name', 'Tipper', (p) => p.name], ['punkte', 'Punkte', (p) => p.summe, 1],
-  ['rueckstand', 'Rückstand', (p) => (p.rueckstand ? '−' + p.rueckstand : '0'), 1], ['schnitt', 'Ø', (p) => fmt1(p.schnitt), 1],
-  ['bester', 'Bester', (p) => p.bester, 1, 1], ['siege', 'Tagessiege', (p) => p.siege, 1, 1], ['sd', 'Konstanz', (p) => fmt1(p.sd), 1, 1],
-  ['trend', 'Trend', (p) => (p.trend > 0 ? '▲' + p.trend : p.trend < 0 ? '▼' + -p.trend : '–'), 1], ['gesamt', 'Gesamt offiziell', (p) => p.gesamt, 1, 1],
+  ['rang', 'Pl.'], ['name', 'Tipper'], ['punkte', 'Punkte', 1], ['rueckstand', 'Rückst.', 1], ['schnitt', 'Ø', 1, 1],
+  ['bester', 'Bester', 1, 1], ['siege', 'Tagessiege', 1, 1], ['sd', 'Konstanz', 1, 1], ['trend', 'Trend', 1], ['gesamt', 'Offiziell', 1, 1],
 ];
 const SORTWERT = { rang: (p) => p.rang, name: (p) => p.name, punkte: (p) => p.summe, rueckstand: (p) => p.rueckstand, schnitt: (p) => p.schnitt, bester: (p) => p.bester, siege: (p) => p.siege, sd: (p) => p.sd, trend: (p) => p.trend, gesamt: (p) => p.gesamt };
 
 function tabelle(R) {
-  const { key, dir } = S.sort, f = SORTWERT[key];
-  const rows = [...R.P].sort((a, b) => { const x = f(a), y = f(b); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * dir || a.rang - b.rang; });
+  const { key, dir } = S.sort, f = SORTWERT[key], max = R.P[0]?.summe || 1;
+  const rows = [...R.P].sort((a, b) => { const x = f(a), y = f(b); return (typeof x === 'string' ? x.localeCompare(y, 'de') : x - y) * dir || a.rang - b.rang; });
   const t = $('#tab'); t.replaceChildren();
   const hr = t.createTHead().insertRow();
-  SPALTEN.forEach(([k, l, , num, sm]) => {
+  SPALTEN.forEach(([k, l, num, sm]) => {
     const th = document.createElement('th'); th.textContent = l; th.className = 'sort' + (num ? ' num' : '') + (sm ? ' hide-sm' : '');
     if (k === key) th.setAttribute('aria-sort', dir > 0 ? 'ascending' : 'descending');
-    th.onclick = () => { S.sort = { key: k, dir: k === key ? -dir : (k === 'name' || k === 'rang' || k === 'sd' || k === 'rueckstand' ? 1 : -1) }; tabelle(R); };
+    th.onclick = () => { S.sort = { key: k, dir: k === key ? -dir : (['name', 'rang', 'sd', 'rueckstand'].includes(k) ? 1 : -1) }; tabelle(R); };
     hr.append(th);
   });
   const tb = t.createTBody();
   rows.forEach((p) => {
-    const tr = tb.insertRow(); if (farbe(p.name)) tr.className = 'hl';
-    SPALTEN.forEach(([k, , fn, num, sm]) => {
-      const td = tr.insertCell(); td.textContent = fn(p); td.className = (num ? 'num' : '') + (sm ? ' hide-sm' : '');
-      if (k === 'trend') td.classList.add(p.trend > 0 ? 'up' : p.trend < 0 ? 'down' : 'x');
-      if (k === 'name' && farbe(p.name)) td.style.boxShadow = `inset 3px 0 0 ${farbe(p.name)}`;
-    });
+    const tr = tb.insertRow();
+    const cell = (cls) => { const td = tr.insertCell(); if (cls) td.className = cls; return td; };
+    const rk = document.createElement('span'); rk.className = 'rk ' + ({ 1: 'g', 2: 's', 3: 'b' }[p.rang] || ''); rk.textContent = p.rang; cell().append(rk);
+    const who = cell(); who.innerHTML = '<span class="who"><i></i><span></span></span>';
+    who.querySelector('i').style.background = FARBE[p.name]; who.querySelector('span span').textContent = p.name;
+    const pt = cell('num'); pt.innerHTML = '<div class="pts"><div class="bar"><span></span></div><b></b></div>';
+    pt.querySelector('.bar span').style.width = (p.summe / max) * 100 + '%'; pt.querySelector('.bar span').style.background = FARBE[p.name]; pt.querySelector('b').textContent = p.summe;
+    cell('num').textContent = p.rueckstand ? '−' + p.rueckstand : '—';
+    cell('num hide-sm').textContent = fmt1(p.schnitt);
+    cell('num hide-sm').textContent = p.bester;
+    cell('num hide-sm').textContent = p.siege || '—';
+    cell('num hide-sm').textContent = R.idx.length > 1 ? fmt1(p.sd) : '—';
+    const tr2 = cell('num ' + (p.trend > 0 ? 'up' : p.trend < 0 ? 'down' : 'x')); tr2.textContent = p.trend > 0 ? '▲ ' + p.trend : p.trend < 0 ? '▼ ' + -p.trend : '•';
+    cell('num hide-sm').textContent = p.gesamt;
   });
 }
 
 function bereichSelects() {
   for (const id of ['#von', '#bis']) {
-    const s = $(id); s.replaceChildren(...D.gespielt.map((i) => new Option(/^\d+$/.test(D.runden[i]) ? 'Spieltag ' + D.runden[i] : D.runden[i], i)));
+    $(id).replaceChildren(...D.gespielt.map((i) => new Option(/^\d+$/.test(D.runden[i]) ? 'Spieltag ' + D.runden[i] : D.runden[i], i)));
   }
   $('#von').value = S.von; $('#bis').value = S.bis;
 }
@@ -352,8 +535,7 @@ function render() {
   kopf(R); chips(R); hauptChart(R); duell(R); heat(R); tabelle(R); hashSchreiben();
 }
 
-// Frische Daten direkt aus dem Repository (ohne den ~10-Minuten-Cache von GitHub Pages),
-// bei Problemen (z. B. API-Limit) Rückfall auf die Kopie neben der Seite.
+// ---------- Daten: direkt aus dem Repository (umgeht den ~10-Minuten-Cache von GitHub Pages) ----------
 const REPO = location.hostname.endsWith('github.io')
   ? `${location.hostname.split('.')[0]}/${location.pathname.split('/')[1]}` : 'manixd99/kicktipp-stats';
 async function laden() {
@@ -368,8 +550,9 @@ async function laden() {
 let geprueft = null;
 function standZeile() {
   const live = Date.now() - new Date(D.aktualisiert) < 15 * 60 * 1000;
+  $('#live').classList.toggle('on', live);
   const t = (d) => d.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
-  $('#stand').textContent = `${live ? '● Live · ' : ''}Stand: ${new Date(D.aktualisiert).toLocaleString('de-AT', { dateStyle: 'medium', timeStyle: 'short' })} · ${D.gespielt.length} von ${D.runden.length} Spieltagen${geprueft ? ' · geprüft ' + t(geprueft) : ''}`;
+  $('#stand').textContent = `Stand ${new Date(D.aktualisiert).toLocaleString('de-AT', { dateStyle: 'medium', timeStyle: 'short' })} · ${D.gespielt.length} von ${D.runden.length} Spieltagen${geprueft ? ' · zuletzt geprüft ' + t(geprueft) : ''}`;
 }
 async function nachladen() {
   if (document.hidden) return;
@@ -377,7 +560,7 @@ async function nachladen() {
     const neu = await laden(); geprueft = new Date();
     if (neu.aktualisiert !== D.aktualisiert) {
       const warAmEnde = S.bis === D.gespielt.at(-1);
-      D = neu; bereichSelects();
+      D = neu; farbenVergeben(); bereichSelects();
       if (warAmEnde) S.bis = D.gespielt.at(-1) ?? S.bis;
       render();
     }
@@ -386,15 +569,12 @@ async function nachladen() {
 }
 
 async function start() {
-  try {
-    D = await laden(); geprueft = new Date();
-  } catch (e) {
-    const el = $('#err'); el.style.display = 'block'; el.textContent = 'Die Daten konnten gerade nicht geladen werden. Bitte später noch einmal versuchen.'; $('#stand').textContent = ''; return;
-  }
+  try { D = await laden(); geprueft = new Date(); }
+  catch (e) { const el = $('#err'); el.style.display = 'block'; el.textContent = 'Die Daten konnten gerade nicht geladen werden. Bitte später noch einmal versuchen.'; $('#stand').textContent = ''; return; }
   $('#src').href = D.quelle;
+  farbenVergeben();
   S.von = D.gespielt[0] ?? 0; S.bis = D.gespielt.at(-1) ?? 0;
-  const top = [...D.spieler].sort((a, b) => b.gesamt - a.gesamt).map((p) => p.name);
-  S.sel = top.slice(0, 3);
+  S.sel = [...D.spieler].sort((a, b) => b.gesamt - a.gesamt).slice(0, 3).map((p) => p.name);
   hashLesen(); bereichSelects();
   $('#view').onclick = (e) => { const v = e.target.closest('button')?.dataset.v; if (v) { S.view = v; render(); } };
   $('#von').onchange = (e) => { S.von = +e.target.value; render(); };
@@ -402,14 +582,15 @@ async function start() {
   $('#d1').onchange = (e) => { S.d1 = e.target.value; render(); };
   $('#d2').onchange = (e) => { S.d2 = e.target.value; render(); };
   document.querySelectorAll('.mini').forEach((b) => (b.onclick = () => {
-    const R = berechne(); const order = [...R.P].sort((x, y) => x.rang - y.rang).map((p) => p.name);
+    const order = berechne().P.map((p) => p.name);
     S.sel = b.dataset.q === 'top3' ? order.slice(0, 3) : b.dataset.q === 'alle' ? order : []; render();
   }));
   $('#share').onclick = async () => {
     const url = location.href;
-    try { if (navigator.share) await navigator.share({ title: document.title, url }); else { await navigator.clipboard.writeText(url); $('#share').textContent = 'Link kopiert'; setTimeout(() => ($('#share').textContent = 'Ansicht teilen'), 1800); } } catch (_) {}
+    try { if (navigator.share) await navigator.share({ title: document.title, url }); else { await navigator.clipboard.writeText(url); $('#share').textContent = 'Link kopiert ✓'; setTimeout(() => ($('#share').textContent = 'Ansicht teilen'), 1800); } } catch (_) {}
   };
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+  let rt, bw = innerWidth; addEventListener('resize', () => { if (innerWidth === bw) return; bw = innerWidth; clearTimeout(rt); rt = setTimeout(render, 250); });
+  if (document.fonts) document.fonts.ready.then(render); else render();
   render();
   setInterval(nachladen, 2 * 60 * 1000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - geprueft > 60 * 1000) nachladen(); });
