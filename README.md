@@ -1,0 +1,12 @@
+# Kicktipp-Statistiken: Champions League 2026/27
+
+Interaktive Statistik-Seite für unsere Kicktipp-Runde. Die Daten kommen aus der öffentlichen
+[Gesamtübersicht](https://www.kicktipp.de/champions-l-202627/gesamtuebersicht) und werden
+automatisch aktualisiert (Di–Fr stündlich, sonst täglich).
+
+- `index.html` – die Seite (Punkterennen, Platzierung, Rückstand, Duell, Heatmap, Tabelle)
+- `data.json` – aktuelle Daten
+- `scripts/fetch_kicktipp.py` – holt die Tabelle von kicktipp.de
+- `.github/workflows/update.yml` – Automatik
+
+Manuell aktualisieren: Reiter **Actions** → „Kicktipp-Daten aktualisieren“ → **Run workflow**.

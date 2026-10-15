@@ -1,0 +1,43 @@
+name: Kicktipp-Daten aktualisieren
+
+on:
+  schedule:
+    # Zeiten in UTC. Di–Fr stündlich (rund um die CL-Abende), sonst einmal täglich.
+    - cron: "20 * * * 2-5"
+    - cron: "20 7 * * 0,1,6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kicktipp-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Abhängigkeiten installieren
+        run: pip install pandas lxml requests
+
+      - name: Tabelle von kicktipp.de holen
+        run: python scripts/fetch_kicktipp.py champions-l-202627 data.json
+
+      - name: Änderungen speichern
+        run: |
+          if git diff --quiet data.json; then
+            echo "Keine neuen Punkte."
+            exit 0
+          fi
+          git config user.name "kicktipp-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Kicktipp-Daten aktualisiert"
+          git push
