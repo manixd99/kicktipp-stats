@@ -134,6 +134,30 @@ tbody tr:hover td { background: rgba(255,255,255,.025); }
 .heat td.c { min-width: 42px; padding: 0; height: 34px; border: 3px solid transparent; background-clip: padding-box; border-radius: 9px; font-weight: 600; }
 .heat td.best { box-shadow: inset 0 0 0 2px var(--gold); color: var(--gold) !important; font-weight: 800; }
 
+/* Kuriositäten */
+.fun { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 10px; }
+.fc { position: relative; background: var(--panel2); border: 1px solid var(--line); border-radius: 14px; padding: 14px 14px 13px; overflow: hidden; }
+.fc .ic { font-size: 22px; line-height: 1; }
+.fc .t { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; font-weight: 600; margin-top: 8px; }
+.fc .w { font-weight: 700; font-size: 17px; margin-top: 2px; overflow-wrap: anywhere; }
+.fc .v { font-family: var(--head); font-weight: 700; font-size: 30px; line-height: 1.05; color: var(--gold); }
+.fc .s { font-size: 12.5px; color: #c3c9dd; margin-top: 4px; line-height: 1.45; }
+.fc::after { content: ""; position: absolute; right: -30px; top: -30px; width: 90px; height: 90px; border-radius: 50%; background: var(--g, rgba(76,201,240,.10)); }
+.prof-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.prof { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+.pf { background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.pf .l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+.pf .v { font-weight: 700; font-size: 18px; margin-top: 2px; overflow-wrap: anywhere; }
+.pf .s { font-size: 12px; color: var(--muted); }
+.split { display: flex; height: 8px; border-radius: 99px; overflow: hidden; margin: 6px 0 3px; background: var(--panel); }
+.teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px; }
+.teams h3 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.tl { display: grid; grid-template-columns: 1fr 90px 46px; gap: 6px 10px; align-items: center; font-size: 14px; }
+.tl .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tl .bar { height: 8px; border-radius: 99px; background: rgba(255,255,255,.06); overflow: hidden; }
+.tl .bar span { display: block; height: 100%; border-radius: 99px; }
+.tl .val { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sub { color: var(--muted); font-size: 12px; font-weight: 500; }
 footer { color: var(--dim); font-size: 12px; margin-top: 28px; text-align: center; }
 footer a { color: var(--muted); }
 .err { background: var(--panel); border: 1px solid var(--bad); color: var(--bad); padding: 16px; border-radius: 14px; margin-top: 16px; display: none; }
@@ -187,6 +211,32 @@ footer a { color: var(--muted); }
     <div class="chartbox"><canvas id="main" aria-label="Hauptdiagramm"></canvas></div>
   </div>
 
+  <div class="card" id="kurios-karte" hidden>
+    <h2>Kuriositäten</h2>
+    <div class="note">Aus allen Einzeltipps im gewählten Zeitraum. Wird nach jedem Spiel neu ausgewertet.</div>
+    <div class="fun" id="fun"></div>
+  </div>
+
+  <div class="grid2" id="tipp-karten" hidden>
+    <div class="card">
+      <h2>Steckbrief</h2>
+      <div class="note">Das Tipp-Profil eines Tippers.</div>
+      <div class="prof-head"><select id="prof-sel"></select></div>
+      <div class="prof" id="prof"></div>
+    </div>
+    <div class="card">
+      <h2>Trefferbild</h2>
+      <div class="note">Wie oft jeder genau richtig, mit richtiger Tordifferenz, nur mit der Tendenz oder komplett daneben lag.</div>
+      <div class="chartbox" id="treffer-box"><canvas id="treffer" aria-label="Trefferbild je Tipper"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" id="team-karte" hidden>
+    <h2>Teams</h2>
+    <div class="note">Ø Punkte, die unsere Runde bei Spielen dieses Teams geholt hat. Wer bringt Punkte, wer macht uns fertig?</div>
+    <div class="teams"><div><h3>💰 Punktelieferanten</h3><div class="tl" id="tm-top"></div></div><div><h3>👻 Angstgegner</h3><div class="tl" id="tm-flop"></div></div></div>
+  </div>
+
   <div class="grid2">
     <div class="card">
       <h2>Duell</h2>
@@ -219,7 +269,7 @@ const PAL = ['#4cc9f0', '#f5c542', '#ff6b6b', '#5be3a0', '#b18cff', '#ff9a4d', '
 const naehe = (a, b) => { const h = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16)); const [x, y] = [h(a), h(b)]; return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]); };
 const $ = (s) => document.querySelector(s);
 const fmt1 = (x) => x.toLocaleString('de-AT', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-const S = { view: 'kum', von: 0, bis: 0, sel: [], sort: { key: 'punkte', dir: -1 }, d1: null, d2: null };
+const S = { view: 'kum', von: 0, bis: 0, sel: [], sort: { key: 'punkte', dir: -1 }, d1: null, d2: null, prof: null };
 let D, charts = {}, FARBE = {};
 const kurz = (n, max = 12) => (n.length > max ? n.slice(0, max - 1) + '…' : n);
 const initial = (n) => n.replace(/[^\p{L}\p{N}]/gu, '').slice(0, 1).toUpperCase();
@@ -293,6 +343,14 @@ const barLabels = {
   afterDatasetsDraw(chart) {
     if (chart.config.type !== 'bar') return;
     const { ctx } = chart;
+    if (chart.options.indexAxis === 'y') {
+      ctx.save(); ctx.font = '700 11px Inter, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      chart.data.datasets.forEach((ds, i) => chart.getDatasetMeta(i).data.forEach((bar, j) => {
+        const v = ds.data[j], { x, y, base } = bar.getProps(['x', 'y', 'base'], true);
+        if (v && Math.abs(x - base) >= 18) { ctx.fillStyle = ds._ink || '#0a0e1c'; ctx.fillText(v, (x + base) / 2, y + 0.5); }
+      }));
+      ctx.restore(); return;
+    }
     ctx.save();
     chart.data.datasets.forEach((ds, i) => {
       chart.getDatasetMeta(i).data.forEach((bar, j) => {
@@ -507,6 +565,191 @@ function tabelle(R) {
   });
 }
 
+// ---------- Einzeltipps: Kuriositäten, Steckbrief, Trefferbild, Teams ----------
+const sg = (x) => Math.sign(x);
+const erg = (e) => `${e[0]}:${e[1]}`;
+const paar = (s) => `${s.heim} – ${s.gast}`;
+const namen = (arr) => (arr.length <= 3 ? arr.join(arr.length === 2 ? ' und ' : ', ').replace(/, ([^,]*)$/, ' und $1') : `${arr.slice(0, 2).join(', ')} und ${arr.length - 2} weitere`);
+const pct = (a, b) => (b ? Math.round((100 * a) / b) : 0);
+
+function tippAuswertung(R) {
+  const tipps = [], spiele = [];
+  for (const i of R.idx) {
+    const tag = D.tage?.[i]; if (!tag) continue;
+    tag.spiele.forEach((s, j) => {
+      if (!s.ergebnis) return;
+      const liste = [];
+      for (const p of R.P) {
+        const t = tag.tipps[p.name]?.[j] || null;
+        let kat = 'kein';
+        if (t) {
+          const [h, a] = t, [rh, ra] = s.ergebnis;
+          kat = h === rh && a === ra ? 'exakt' : h - a === rh - ra ? 'diff' : sg(h - a) === sg(rh - ra) ? 'tend' : 'falsch';
+        }
+        const e = { name: p.name, s, t, kat, label: D.runden[i], fehler: t ? Math.abs(t[0] - s.ergebnis[0]) + Math.abs(t[1] - s.ergebnis[1]) : 0 };
+        tipps.push(e); liste.push(e);
+      }
+      spiele.push({ s, label: D.runden[i], liste });
+    });
+  }
+  if (!tipps.length) return null;
+  const P = {};
+  for (const p of R.P) P[p.name] = { name: p.name, n: 0, exakt: 0, diff: 0, tend: 0, falsch: 0, kein: 0, heim: 0, remis: 0, ausw: 0, tore: 0, pkt: 0, erg: {}, team: {}, alleinRichtig: [] };
+  const teams = {}, ergAlle = {};
+  let echteTore = 0, echteRemis = 0;
+  for (const sp of spiele) { echteTore += sp.s.ergebnis[0] + sp.s.ergebnis[1]; if (sp.s.ergebnis[0] === sp.s.ergebnis[1]) echteRemis++; }
+  for (const e of tipps) {
+    const q = P[e.name]; q[e.kat]++;
+    if (!e.t) continue;
+    q.n++; q.pkt += e.t[2]; q.tore += e.t[0] + e.t[1];
+    const d = sg(e.t[0] - e.t[1]); if (d > 0) q.heim++; else if (d < 0) q.ausw++; else q.remis++;
+    const k = erg(e.t); q.erg[k] = (q.erg[k] || 0) + 1; ergAlle[k] = (ergAlle[k] || 0) + 1;
+    for (const tm of [e.s.heim, e.s.gast]) {
+      (q.team[tm] ||= [0, 0]); q.team[tm][0] += e.t[2]; q.team[tm][1]++;
+      (teams[tm] ||= [0, 0]); teams[tm][0] += e.t[2]; teams[tm][1]++;
+    }
+  }
+  for (const sp of spiele) {
+    sp.richtig = sp.liste.filter((e) => e.t && sg(e.t[0] - e.t[1]) === sg(sp.s.ergebnis[0] - sp.s.ergebnis[1]));
+    sp.getippt = sp.liste.filter((e) => e.t).length;
+    if (sp.richtig.length === 1 && sp.getippt > 2) P[sp.richtig[0].name].alleinRichtig.push(sp);
+  }
+  return { tipps, spiele, P, teams, ergAlle, echteTore, echteRemis };
+}
+
+function besteNach(list, f, hoch = true) {
+  const w = list.map(f), best = hoch ? Math.max(...w) : Math.min(...w);
+  return { wert: best, wer: list.filter((_, i) => w[i] === best) };
+}
+
+function kurios(R, A) {
+  const L = Object.values(A.P).filter((q) => q.n), out = [];
+  const add = (ic, t, w, v, sTxt, g) => out.push({ ic, t, w, v, s: sTxt, g });
+  const nSp = A.spiele.length;
+
+  const ex = besteNach(L, (q) => q.exakt);
+  if (ex.wert > 0) {
+    const bsp = A.tipps.filter((e) => e.kat === 'exakt' && e.name === ex.wer[0].name).sort((a, b) => b.s.ergebnis[0] + b.s.ergebnis[1] - (a.s.ergebnis[0] + a.s.ergebnis[1]))[0];
+    add('🎯', 'Scharfschütze', namen(ex.wer.map((q) => q.name)), `${ex.wert}× exakt`, bsp ? `Zum Beispiel ${erg(bsp.t)} bei ${paar(bsp.s)}.` : '', 'rgba(245,197,66,.14)');
+  }
+  const schlecht = A.tipps.filter((e) => e.kat === 'falsch').sort((a, b) => b.fehler - a.fehler || a.t[2] - b.t[2])[0];
+  if (schlecht) {
+    const gleich = A.tipps.filter((e) => e.kat === 'falsch' && e.fehler === schlecht.fehler && e.s === schlecht.s && erg(e.t) === erg(schlecht.t));
+    add('🙈', 'Schlechtester Tipp', namen(gleich.map((e) => e.name)), erg(schlecht.t), `bei ${paar(schlecht.s)}. Ausgegangen ist es ${erg(schlecht.s.ergebnis)}, ${schlecht.fehler} Tore daneben.`, 'rgba(255,107,107,.14)');
+  }
+  const wolf = besteNach(L, (q) => q.alleinRichtig.length);
+  if (wolf.wert > 0) {
+    const sp = wolf.wer[0].alleinRichtig[0];
+    add('🐺', 'Einsamer Wolf', namen(wolf.wer.map((q) => q.name)), `${wolf.wert}× allein richtig`, `Als Einziger die richtige Tendenz, z. B. bei ${paar(sp.s)} (${erg(sp.s.ergebnis)}).`, 'rgba(177,140,255,.16)');
+  }
+  const ueb = [...A.spiele].filter((sp) => sp.getippt).sort((a, b) => a.richtig.length / a.getippt - b.richtig.length / b.getippt)[0];
+  if (ueb) {
+    add('😱', 'Größte Überraschung', paar(ueb.s), erg(ueb.s.ergebnis),
+      ueb.richtig.length ? `Nur ${namen(ueb.richtig.map((e) => e.name))} ${ueb.richtig.length === 1 ? 'hatte' : 'hatten'} die richtige Tendenz.` : `Keiner von ${ueb.getippt} hatte das auf dem Zettel.`, 'rgba(255,154,77,.14)');
+  }
+  const top = Object.entries(A.ergAlle).sort((a, b) => b[1] - a[1])[0];
+  if (top) {
+    const real = A.spiele.filter((sp) => erg(sp.s.ergebnis) === top[0]).length, alle = Object.values(A.ergAlle).reduce((a, b) => a + b, 0);
+    add('🔮', 'Lieblingsergebnis der Runde', 'Wir alle', top[0], `${pct(top[1], alle)} % aller Tipps. Wirklich so ausgegangen: ${real} von ${nSp} Spielen.`, 'rgba(76,201,240,.14)');
+  }
+  const heimfan = besteNach(L, (q) => q.heim / q.n);
+  add('🏠', 'Heimfan', namen(heimfan.wer.map((q) => q.name)), `${pct(heimfan.wer[0].heim, heimfan.wer[0].n)} %`, `der Tipps auf Heimsieg. In Wirklichkeit gewann das Heimteam ${pct(A.spiele.filter((sp) => sp.s.ergebnis[0] > sp.s.ergebnis[1]).length, nSp)} % der Spiele.`, 'rgba(91,227,160,.14)');
+  const remis = besteNach(L, (q) => q.remis, false);
+  add('🙅', 'Remis-Verweigerer', namen(remis.wer.map((q) => q.name)), `${remis.wert}× Remis`, `getippt. Tatsächlich endeten ${A.echteRemis} von ${nSp} Spielen unentschieden.`, 'rgba(244,114,182,.14)');
+  const ofen = besteNach(L, (q) => q.tore / q.n), beton = besteNach(L, (q) => q.tore / q.n, false);
+  const echt = fmt1(A.echteTore / nSp);
+  add('🎆', 'Torfestival-Optimist', namen(ofen.wer.map((q) => q.name)), `Ø ${fmt1(ofen.wert)} Tore`, `pro Spiel getippt. In echt fielen Ø ${echt}.`, 'rgba(245,197,66,.12)');
+  add('🧱', 'Betonmischer', namen(beton.wer.map((q) => q.name)), `Ø ${fmt1(beton.wert)} Tore`, `pro Spiel getippt. Catenaccio-Fan, in echt fielen Ø ${echt}.`, 'rgba(201,154,110,.16)');
+  const pech = besteNach(L, (q) => q.falsch + q.kein);
+  add('🌧️', 'Pechvogel', namen(pech.wer.map((q) => q.name)), `${pech.wert}× null Punkte`, `von ${nSp} Spielen komplett daneben.`, 'rgba(142,152,184,.14)');
+  const vergessen = L.filter((q) => q.kein).sort((a, b) => b.kein - a.kein);
+  if (vergessen.length) add('💤', 'Tipp vergessen', namen(vergessen.filter((q) => q.kein === vergessen[0].kein).map((q) => q.name)), `${vergessen[0].kein}×`, 'kein Tipp abgegeben. Schnarch.', 'rgba(142,152,184,.14)');
+
+  $('#fun').replaceChildren(...out.map((c) => {
+    const d = document.createElement('div'); d.className = 'fc'; if (c.g) d.style.setProperty('--g', c.g);
+    d.innerHTML = '<div class="ic"></div><div class="t"></div><div class="w"></div><div class="v"></div><div class="s"></div>';
+    const [ic, t, w, v, sx] = d.children; ic.textContent = c.ic; t.textContent = c.t; w.textContent = c.w; v.textContent = c.v; sx.textContent = c.s;
+    return d;
+  }));
+}
+
+function steckbrief(R, A) {
+  const names = R.P.map((p) => p.name);
+  if (!names.includes(S.prof)) S.prof = S.sel.find((n) => names.includes(n)) || names[0];
+  const sel = $('#prof-sel'); sel.replaceChildren(...names.map((n) => new Option(n, n))); sel.value = S.prof;
+  const q = A.P[S.prof], p = R.P.find((x) => x.name === S.prof);
+  const fav = Object.entries(q.erg).sort((a, b) => b[1] - a[1])[0];
+  const tm = Object.entries(q.team).filter(([, v]) => v[1] >= 2).map(([k, v]) => [k, v[0] / v[1], v[1]]).sort((a, b) => b[1] - a[1]);
+  const meins = A.tipps.filter((e) => e.name === S.prof && e.t);
+  const coup = meins.filter((e) => e.kat === 'exakt').map((e) => ({ e, sp: A.spiele.find((sp) => sp.s === e.s) })).sort((a, b) => a.sp.richtig.length - b.sp.richtig.length)[0];
+  const patzer = meins.filter((e) => e.kat === 'falsch').sort((a, b) => b.fehler - a.fehler)[0];
+  const richtig = q.exakt + q.diff + q.tend;
+  const tiles = [
+    ['Punkte', p.summe, `Platz ${p.rang} im Zeitraum`],
+    ['Tendenz richtig', `${pct(richtig, q.n + q.kein)} %`, `${richtig} von ${q.n + q.kein} Spielen`],
+    ['Volltreffer', q.exakt, `${q.diff}× Tordifferenz, ${q.tend}× Tendenz`],
+    ['Lieblingstipp', fav ? fav[0] : '–', fav ? `${fav[1]}× getippt (${pct(fav[1], q.n)} %)` : ''],
+    ['Ø Tore getippt', fmt1(q.tore / (q.n || 1)), `echt: Ø ${fmt1(A.echteTore / A.spiele.length)}`],
+    ['Glücksbringer', tm[0] ? tm[0][0] : '–', tm[0] ? `Ø ${fmt1(tm[0][1])} Pkt. in ${tm[0][2]} Spielen` : 'ab 2 Spielen pro Team'],
+    ['Angstgegner', tm.length > 1 ? tm.at(-1)[0] : '–', tm.length > 1 ? `Ø ${fmt1(tm.at(-1)[1])} Pkt. in ${tm.at(-1)[2]} Spielen` : ''],
+    ['Bester Coup', coup ? erg(coup.e.t) : '–', coup ? `${paar(coup.e.s)}, exakt. ${coup.sp.richtig.length - 1 ? `${coup.sp.richtig.length - 1} andere hatten die Tendenz` : 'Sonst hatte niemand die Tendenz'}` : 'noch kein Volltreffer'],
+    ['Größter Patzer', patzer ? erg(patzer.t) : '–', patzer ? `${paar(patzer.s)} endete ${erg(patzer.s.ergebnis)}` : 'bisher nie komplett daneben'],
+  ];
+  const box = $('#prof'); box.replaceChildren();
+  tiles.forEach(([l, v, sx]) => {
+    const d = document.createElement('div'); d.className = 'pf';
+    d.innerHTML = '<div class="l"></div><div class="v"></div><div class="s"></div>';
+    d.children[0].textContent = l; d.children[1].textContent = v; d.children[2].textContent = sx; box.append(d);
+  });
+  const d = document.createElement('div'); d.className = 'pf'; d.style.gridColumn = '1 / -1';
+  const h = pct(q.heim, q.n), r = pct(q.remis, q.n), a = 100 - h - r;
+  d.innerHTML = `<div class="l">Tipp-Verteilung</div><div class="split"><span style="width:${h}%;background:#5be3a0"></span><span style="width:${r}%;background:#8e98b8"></span><span style="width:${a}%;background:#ff9a4d"></span></div><div class="s">Heimsieg ${h} % · Remis ${r} % · Auswärtssieg ${a} %</div>`;
+  box.append(d);
+  d.style.setProperty('--c', FARBE[S.prof]);
+  box.firstChild.style.borderColor = FARBE[S.prof];
+}
+
+function trefferbild(R, A) {
+  const rows = R.P.map((p) => A.P[p.name]);
+  $('#treffer-box').style.height = Math.max(260, rows.length * 30 + 60) + 'px';
+  const ds = [['Exakt', 'exakt', '#f5c542'], ['Tordifferenz', 'diff', '#5be3a0'], ['Tendenz', 'tend', '#4cc9f0'], ['Daneben', 'falsch', 'rgba(255,107,107,.35)'], ['Kein Tipp', 'kein', 'rgba(142,152,184,.25)']]
+    .map(([label, k, c]) => ({ label, data: rows.map((q) => q[k]), backgroundColor: c, _ink: k === 'falsch' || k === 'kein' ? '#eef1fb' : '#0a0e1c', borderRadius: 4, borderSkipped: false, barPercentage: 0.78, categoryPercentage: 0.9 }))
+    .filter((d) => d.data.some((v) => v));
+  charts.treffer?.destroy();
+  charts.treffer = new Chart($('#treffer'), {
+    type: 'bar',
+    data: { labels: rows.map((q) => q.name), datasets: ds },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: { duration: 350 },
+      plugins: { legend: { display: true, position: 'top', align: 'start', labels: { color: '#c3c9dd', boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: 'rectRounded', font: { size: 12 } } }, tooltip },
+      scales: { x: { stacked: true, display: false }, y: { stacked: true, grid: { display: false }, border: { display: false }, ticks: { color: '#eef1fb', font: { weight: 600 } } } } },
+  });
+}
+
+function teamListe(R, A) {
+  const t = Object.entries(A.teams).filter(([, v]) => v[1] >= R.P.length).map(([k, v]) => [k, v[0] / v[1], v[1] / R.P.length]).sort((a, b) => b[1] - a[1]);
+  const max = Math.max(...t.map((x) => x[1]), 1);
+  const fill = (el, list, c) => {
+    el.replaceChildren();
+    list.forEach(([k, v, n]) => {
+      const nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = k;
+      const sub = document.createElement('span'); sub.className = 'sub'; sub.textContent = ` · ${Math.round(n)} Sp.`; nm.append(sub);
+      const b = document.createElement('div'); b.className = 'bar'; b.innerHTML = `<span style="width:${(v / max) * 100}%;background:${c}"></span>`;
+      const val = document.createElement('div'); val.className = 'val'; val.textContent = fmt1(v);
+      el.append(nm, b, val);
+    });
+  };
+  const n = Math.min(6, Math.floor(t.length / 2));
+  fill($('#tm-top'), t.slice(0, n), '#5be3a0');
+  fill($('#tm-flop'), t.slice(-n).reverse(), '#ff6b6b');
+}
+
+function tippTeil(R) {
+  const A = D.tage ? tippAuswertung(R) : null;
+  for (const id of ['#kurios-karte', '#tipp-karten', '#team-karte']) $(id).hidden = !A;
+  if (!A) return;
+  kurios(R, A); steckbrief(R, A); trefferbild(R, A); teamListe(R, A);
+}
+
 function bereichSelects() {
   for (const id of ['#von', '#bis']) {
     $(id).replaceChildren(...D.gespielt.map((i) => new Option(/^\d+$/.test(D.runden[i]) ? 'Spieltag ' + D.runden[i] : D.runden[i], i)));
@@ -532,7 +775,7 @@ function render() {
   $('#von').value = S.von; $('#bis').value = S.bis;
   document.querySelectorAll('#view button').forEach((b) => b.classList.toggle('on', b.dataset.v === S.view));
   const R = berechne();
-  kopf(R); chips(R); hauptChart(R); duell(R); heat(R); tabelle(R); hashSchreiben();
+  kopf(R); chips(R); hauptChart(R); tippTeil(R); duell(R); heat(R); tabelle(R); hashSchreiben();
 }
 
 // ---------- Daten: direkt aus dem Repository (umgeht den ~10-Minuten-Cache von GitHub Pages) ----------
@@ -581,6 +824,7 @@ async function start() {
   $('#bis').onchange = (e) => { S.bis = +e.target.value; render(); };
   $('#d1').onchange = (e) => { S.d1 = e.target.value; render(); };
   $('#d2').onchange = (e) => { S.d2 = e.target.value; render(); };
+  $('#prof-sel').onchange = (e) => { S.prof = e.target.value; render(); };
   document.querySelectorAll('.mini').forEach((b) => (b.onclick = () => {
     const order = berechne().P.map((p) => p.name);
     S.sel = b.dataset.q === 'top3' ? order.slice(0, 3) : b.dataset.q === 'alle' ? order : []; render();
