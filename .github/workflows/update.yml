@@ -43,7 +43,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           holen() {
-            python scripts/fetch_kicktipp.py champions-l-202627 data.json || return 0
+            python scripts/fetch_kicktipp.py champions-l-202627 data.json $1 || return 0
             if ! git diff --quiet data.json; then
               git add data.json
               git commit -qm "Kicktipp-Daten aktualisiert"
@@ -51,7 +51,7 @@ jobs:
             fi
           }
 
-          holen
+          if [ "$LIVE" = "true" ]; then holen; else holen --voll; fi
           if [ "$LIVE" = "true" ]; then
             ende=$(TZ=Europe/Vienna date -d "today 23:30" +%s)
             echo "Live-Modus bis $(TZ=Europe/Vienna date -d @$ende +%H:%M) Wiener Zeit"
