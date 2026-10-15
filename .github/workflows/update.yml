@@ -2,10 +2,17 @@ name: Kicktipp-Daten aktualisieren
 
 on:
   schedule:
-    # Zeiten in UTC. Di–Fr stündlich (rund um die CL-Abende), sonst einmal täglich.
-    - cron: "20 * * * 2-5"
-    - cron: "20 7 * * 0,1,6"
+    # Zeiten in UTC.
+    # Live-Modus an CL-Abenden (Di, Mi, Do): Start 16:40 UTC, dann alle 2 Minuten bis 23:30 Wiener Zeit.
+    - cron: "40 16 * * 2,3,4"
+    # Sonst einmal am Morgen, falls Kicktipp nachträglich korrigiert.
+    - cron: "20 6 * * *"
   workflow_dispatch:
+    inputs:
+      live:
+        description: "Live-Modus (alle 2 Minuten bis 23:30) starten?"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -17,6 +24,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
 
@@ -27,17 +35,28 @@ jobs:
       - name: Abhängigkeiten installieren
         run: pip install pandas lxml requests
 
-      - name: Tabelle von kicktipp.de holen
-        run: python scripts/fetch_kicktipp.py champions-l-202627 data.json
-
-      - name: Änderungen speichern
+      - name: Daten holen (live oder einmalig)
+        env:
+          LIVE: ${{ github.event.schedule == '40 16 * * 2,3,4' || inputs.live == true }}
         run: |
-          if git diff --quiet data.json; then
-            echo "Keine neuen Punkte."
-            exit 0
-          fi
           git config user.name "kicktipp-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data.json
-          git commit -m "Kicktipp-Daten aktualisiert"
-          git push
+
+          holen() {
+            python scripts/fetch_kicktipp.py champions-l-202627 data.json || return 0
+            if ! git diff --quiet data.json; then
+              git add data.json
+              git commit -qm "Kicktipp-Daten aktualisiert"
+              git pull -q --rebase origin main && git push -q && echo "$(date +%H:%M) neue Punkte veröffentlicht"
+            fi
+          }
+
+          holen
+          if [ "$LIVE" = "true" ]; then
+            ende=$(TZ=Europe/Vienna date -d "today 23:30" +%s)
+            echo "Live-Modus bis $(TZ=Europe/Vienna date -d @$ende +%H:%M) Wiener Zeit"
+            while [ "$(date +%s)" -lt "$ende" ]; do
+              sleep 120
+              holen
+            done
+          fi

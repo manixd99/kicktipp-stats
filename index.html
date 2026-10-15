@@ -139,7 +139,7 @@ footer a { color: inherit; }
     <div class="scroll"><table id="tab"></table></div>
   </div>
 
-  <footer>Daten: <a id="src" href="#" target="_blank" rel="noopener">kicktipp.de</a> · aktualisiert sich automatisch nach jedem Spieltag</footer>
+  <footer>Daten: <a id="src" href="#" target="_blank" rel="noopener">kicktipp.de</a> · aktualisiert sich an Spieltagen alle paar Minuten, auch während der Spiele</footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -187,8 +187,7 @@ function kopf(R) {
   const letzter = R.idx.length - 1;
   const tagSieger = R.P.filter((p) => p.tage[letzter] === R.tagesMax[letzter]);
   const aufsteiger = [...R.P].sort((x, y) => y.trend - x.trend)[0];
-  const d = new Date(D.aktualisiert);
-  $('#stand').textContent = `Stand: ${d.toLocaleString('de-AT', { dateStyle: 'medium', timeStyle: 'short' })} · ${D.gespielt.length} von ${D.runden.length} Spieltagen`;
+  standZeile();
   const take = $('#take'); take.replaceChildren();
   const add = (t, bold) => { const e = document.createElement(bold ? 'b' : 'span'); e.textContent = t; take.append(e); };
   if (!R.idx.length) { add('Noch keine Spieltage im gewählten Bereich.'); return; }
@@ -353,11 +352,42 @@ function render() {
   kopf(R); chips(R); hauptChart(R); duell(R); heat(R); tabelle(R); hashSchreiben();
 }
 
+// Frische Daten direkt aus dem Repository (ohne den ~10-Minuten-Cache von GitHub Pages),
+// bei Problemen (z. B. API-Limit) Rückfall auf die Kopie neben der Seite.
+const REPO = location.hostname.endsWith('github.io')
+  ? `${location.hostname.split('.')[0]}/${location.pathname.split('/')[1]}` : 'manixd99/kicktipp-stats';
+async function laden() {
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/data.json?ref=main&t=${Date.now()}`, { headers: { Accept: 'application/vnd.github.raw+json' }, cache: 'no-store' });
+    if (r.ok) return await r.json();
+  } catch (_) {}
+  const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+let geprueft = null;
+function standZeile() {
+  const live = Date.now() - new Date(D.aktualisiert) < 15 * 60 * 1000;
+  const t = (d) => d.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+  $('#stand').textContent = `${live ? '● Live · ' : ''}Stand: ${new Date(D.aktualisiert).toLocaleString('de-AT', { dateStyle: 'medium', timeStyle: 'short' })} · ${D.gespielt.length} von ${D.runden.length} Spieltagen${geprueft ? ' · geprüft ' + t(geprueft) : ''}`;
+}
+async function nachladen() {
+  if (document.hidden) return;
+  try {
+    const neu = await laden(); geprueft = new Date();
+    if (neu.aktualisiert !== D.aktualisiert) {
+      const warAmEnde = S.bis === D.gespielt.at(-1);
+      D = neu; bereichSelects();
+      if (warAmEnde) S.bis = D.gespielt.at(-1) ?? S.bis;
+      render();
+    }
+    standZeile();
+  } catch (_) {}
+}
+
 async function start() {
   try {
-    const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    D = await r.json();
+    D = await laden(); geprueft = new Date();
   } catch (e) {
     const el = $('#err'); el.style.display = 'block'; el.textContent = 'Die Daten konnten gerade nicht geladen werden. Bitte später noch einmal versuchen.'; $('#stand').textContent = ''; return;
   }
@@ -381,6 +411,8 @@ async function start() {
   };
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
   render();
+  setInterval(nachladen, 2 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - geprueft > 60 * 1000) nachladen(); });
 }
 start();
 </script>
