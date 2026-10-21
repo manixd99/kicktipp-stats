@@ -1008,6 +1008,36 @@ start();
     zeigeAnleitung();
   }
 
+  // Einmaliger Hinweis für iPhone-Homescreen-Apps: iOS übernimmt ein neues Logo nie von selbst.
+  // Läuft nur bis Mitte November, danach haben es alle gesehen, die es betrifft.
+  function neuesLogo() {
+    const LOGO_KEY = 'kt-logo-2026-10';
+    if (Date.now() > Date.parse('2026-11-15')) return;
+    try { if (localStorage.getItem(LOGO_KEY)) return; } catch (_) { return; }
+    const fertig = () => { try { localStorage.setItem(LOGO_KEY, '1'); } catch (_) {} zu(); };
+    setTimeout(() => {
+      el('a2-titel').textContent = 'Neues Logo!';
+      const t = el('a2-text'); t.textContent = 'Dein iPhone zeigt noch das alte Symbol. So bekommst du das neue:'; t.hidden = false;
+      const ol = el('a2-steps'); ol.hidden = false;
+      ol.innerHTML = [
+        'Tippe unten auf <b>„Link kopieren“</b>.',
+        'Halte das App-Symbol am Homescreen gedrückt und wähle <b>„App entfernen“</b>.',
+        `Füge den Link in <b>Safari</b> ein und tippe auf <b>Teilen</b> ${ic('teilen')} → <b>„Zum Home-Bildschirm“</b> ${ic('plus')}.`,
+      ].map((s) => `<li><span>${s}</span></li>`).join('');
+      el('a2-hinweis').hidden = true; el('a2-knoepfe').hidden = false; el('a2-nie').hidden = true;
+      const sp = el('a2-spaeter'), ja = el('a2-ja');
+      sp.textContent = 'Passt so'; sp.onclick = fertig;
+      ja.textContent = 'Link kopieren';
+      ja.onclick = async () => {
+        try { await navigator.clipboard.writeText(location.origin + location.pathname); ja.textContent = 'Kopiert ✓'; }
+        catch (_) { ja.textContent = location.host + location.pathname; }
+        try { localStorage.setItem(LOGO_KEY, '1'); } catch (_) {}
+        setTimeout(zu, 1800);
+      };
+      const a = el('a2'); a.hidden = false; requestAnimationFrame(() => a.classList.add('auf'));
+    }, 1500);
+  }
+
   function init() {
     el('a2-ja').onclick = ja;
     el('a2-spaeter').onclick = () => { merk({ ...lies(), spaeter: Date.now() }); zu(); };
@@ -1015,6 +1045,7 @@ start();
     el('a2').addEventListener('click', (e) => { if (e.target.id === 'a2') { merk({ ...lies(), spaeter: Date.now() }); zu(); } });
     addEventListener('keydown', (e) => { if (e.key === 'Escape' && !el('a2').hidden) zu(); });
     const link = el('a2-link');
+    if (installiert() && ios && !imRahmen) neuesLogo();
     if (installiert() || imRahmen) { el('a2-link-wrap')?.remove(); return; }
     link.onclick = () => { auf(); el('a2-ja').onclick = ja; };
 
