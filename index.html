@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!doctype html>
 <html lang="de">
 <head>
@@ -9,6 +10,12 @@
 <meta property="og:description" content="Wer führt? Wer holt auf? Alle Statistiken unserer Kicktipp-Runde, live während der Spiele.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#070b1a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tipprunde">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23070b1a'/%3E%3Cpath d='M16 6.5l2.8 5.7 6.3.9-4.55 4.45 1.07 6.25L16 20.8l-5.62 2.95 1.07-6.25L6.9 13.1l6.3-.9z' fill='%23f5c542'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +38,7 @@ body {
     var(--bg);
   min-height: 100vh;
 }
-.wrap { max-width: 1120px; margin: 0 auto; padding: 18px 16px 56px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 18px 16px 56px; overflow-x: clip; }
 .num, .tab { font-variant-numeric: tabular-nums; }
 
 /* Kopf */
@@ -170,6 +177,32 @@ footer a { color: var(--muted); }
   .card { padding: 14px; border-radius: 16px; }
   .pts .bar { display: none; }
 }
+
+/* Homescreen-Popup */
+.a2 { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center; padding: 12px; background: rgba(3,6,15,.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); opacity: 0; transition: opacity .2s; }
+.a2[hidden] { display: none !important; }
+.a2.auf { opacity: 1; }
+.a2-box { width: 100%; max-width: 420px; background: linear-gradient(180deg, var(--panel2), var(--panel)); border: 1px solid var(--line2); border-radius: 22px; padding: 20px 18px calc(16px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 20px 60px rgba(0,0,0,.5); transform: translateY(24px); transition: transform .25s; }
+.a2.auf .a2-box { transform: none; }
+@media (min-width: 700px) { .a2 { align-items: center; } }
+.a2-kopf { display: flex; gap: 14px; align-items: center; }
+.a2-kopf img { width: 56px; height: 56px; border-radius: 14px; flex: none; box-shadow: 0 0 0 1px var(--line2); }
+.a2-kopf h3 { margin: 0; font-family: var(--head); font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; }
+.a2-kopf p { margin: 3px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
+.a2-steps { list-style: none; counter-reset: s; margin: 16px 0 4px; padding: 0; display: grid; gap: 10px; }
+.a2-steps li { counter-increment: s; display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; font-size: 14.5px; line-height: 1.45; }
+.a2-steps li::before { content: counter(s); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; background: var(--gold); color: #1a1405; }
+.a2-steps b { color: var(--fg); }
+.a2-ic { display: inline-grid; place-items: center; vertical-align: -5px; width: 22px; height: 22px; margin: 0 2px; border-radius: 6px; background: rgba(255,255,255,.1); color: var(--cyan); }
+.a2-ic svg { width: 15px; height: 15px; }
+.a2-hinweis { margin: 12px 0 0; font-size: 12.5px; color: var(--muted); }
+.a2-knoepfe { display: flex; gap: 8px; margin-top: 18px; }
+.a2-knoepfe button { flex: 1; font: inherit; font-size: 15px; font-weight: 600; border-radius: 12px; padding: 11px 12px; cursor: pointer; border: 1px solid var(--line2); background: transparent; color: var(--fg); }
+.a2-knoepfe .ja { background: var(--gold); border-color: var(--gold); color: #1a1405; flex: 1.4; }
+.a2-nie { display: block; margin: 12px auto 0; font: inherit; font-size: 12.5px; color: var(--dim); background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.a2-pfeil { position: fixed; left: 50%; bottom: 6px; transform: translateX(-50%); z-index: 101; color: var(--gold); font-size: 30px; animation: a2hop 1s infinite; pointer-events: none; }
+@keyframes a2hop { 50% { transform: translate(-50%, 6px); } }
+footer .a2-link { font: inherit; font-size: 12px; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -259,7 +292,23 @@ footer a { color: var(--muted); }
     <div class="scroll"><table id="tab"></table></div>
   </div>
 
-  <footer>Daten: <a id="src" href="#" target="_blank" rel="noopener">kicktipp.de</a> · an Spieltagen alle paar Minuten aktualisiert, auch während der Spiele</footer>
+  <footer>Daten: <a id="src" href="#" target="_blank" rel="noopener">kicktipp.de</a> · an Spieltagen alle paar Minuten aktualisiert, auch während der Spiele<span id="a2-link-wrap"> · <button type="button" class="a2-link" id="a2-link">Als App auf den Homescreen</button></span></footer>
+</div>
+
+<div class="a2" id="a2" hidden role="dialog" aria-modal="true" aria-labelledby="a2-titel">
+  <div class="a2-box">
+    <div class="a2-kopf">
+      <img src="icon-192.png" alt="">
+      <div><h3 id="a2-titel">Tipprunde als App</h3><p id="a2-text">Leg dir die Seite auf den Homescreen: ein Tipp, und du siehst sofort den aktuellen Stand, ohne Browserleiste.</p></div>
+    </div>
+    <ol class="a2-steps" id="a2-steps" hidden></ol>
+    <p class="a2-hinweis" id="a2-hinweis" hidden></p>
+    <div class="a2-knoepfe" id="a2-knoepfe">
+      <button type="button" id="a2-spaeter">Später</button>
+      <button type="button" class="ja" id="a2-ja">Ja, hinzufügen</button>
+    </div>
+    <button type="button" class="a2-nie" id="a2-nie">Nicht mehr anzeigen</button>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -269,7 +318,8 @@ const PAL = ['#4cc9f0', '#f5c542', '#ff6b6b', '#5be3a0', '#b18cff', '#ff9a4d', '
 const naehe = (a, b) => { const h = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16)); const [x, y] = [h(a), h(b)]; return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]); };
 const $ = (s) => document.querySelector(s);
 const fmt1 = (x) => x.toLocaleString('de-AT', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-const S = { view: 'kum', von: 0, bis: 0, sel: [], sort: { key: 'punkte', dir: -1 }, d1: null, d2: null, prof: null };
+// bisFix: false = der Zeitraum endet immer beim neuesten Spieltag und wächst automatisch mit.
+const S = { view: 'kum', von: 0, bis: 0, bisFix: false, sel: [], sort: { key: 'punkte', dir: -1 }, d1: null, d2: null, prof: null };
 let D, charts = {}, FARBE = {};
 const kurz = (n, max = 12) => (n.length > max ? n.slice(0, max - 1) + '…' : n);
 const initial = (n) => n.replace(/[^\p{L}\p{N}]/gu, '').slice(0, 1).toUpperCase();
@@ -752,26 +802,35 @@ function tippTeil(R) {
 
 function bereichSelects() {
   for (const id of ['#von', '#bis']) {
-    $(id).replaceChildren(...D.gespielt.map((i) => new Option(/^\d+$/.test(D.runden[i]) ? 'Spieltag ' + D.runden[i] : D.runden[i], i)));
+    $(id).replaceChildren(...D.gespielt.map((i) => new Option((/^\d+$/.test(D.runden[i]) ? 'Spieltag ' + D.runden[i] : D.runden[i]) + (id === '#bis' && i === D.gespielt.at(-1) ? ' (aktuell)' : ''), i)));
   }
   $('#von').value = S.von; $('#bis').value = S.bis;
 }
 
 function hashSchreiben() {
-  const p = new URLSearchParams({ v: S.view, von: S.von, bis: S.bis, s: S.sel.join('|'), d: [S.d1, S.d2].join('|') });
+  // Das Ende des Zeitraums kommt nur in den Link, wenn es bewusst früher gewählt wurde,
+  // sonst würde ein alter Link (oder Neuladen) die Seite auf einem alten Spieltag festhalten.
+  const p = new URLSearchParams({ v: S.view });
+  if (S.von !== D.gespielt[0]) p.set('von', S.von);
+  if (S.bisFix) p.set('ende', S.bis);
+  p.set('s', S.sel.join('|')); p.set('d', [S.d1, S.d2].join('|'));
   history.replaceState(null, '', '#' + p.toString());
 }
 function hashLesen() {
   const p = new URLSearchParams(location.hash.slice(1));
   if (['kum', 'platz', 'rueck', 'tag'].includes(p.get('v'))) S.view = p.get('v');
   const names = D.spieler.map((x) => x.name);
-  if (p.has('von')) S.von = +p.get('von'); if (p.has('bis')) S.bis = +p.get('bis');
+  if (p.has('von') && D.gespielt.includes(+p.get('von'))) S.von = +p.get('von');
+  // Alte Links enthalten noch "bis" und werden ignoriert: ohne bewusste Wahl gilt immer der neueste Spieltag.
+  if (p.has('ende') && D.gespielt.includes(+p.get('ende')) && +p.get('ende') !== D.gespielt.at(-1)) { S.bis = +p.get('ende'); S.bisFix = true; }
   if (p.get('s')) S.sel = p.get('s').split('|').filter((n) => names.includes(n));
   if (p.get('d')) [S.d1, S.d2] = p.get('d').split('|');
 }
 
 function render() {
+  if (!S.bisFix) S.bis = D.gespielt.at(-1) ?? S.bis;
   if (S.von > S.bis) [S.von, S.bis] = [S.bis, S.von];
+  S.bisFix = S.bis !== D.gespielt.at(-1);
   $('#von').value = S.von; $('#bis').value = S.bis;
   document.querySelectorAll('#view button').forEach((b) => b.classList.toggle('on', b.dataset.v === S.view));
   const R = berechne();
@@ -801,10 +860,11 @@ async function nachladen() {
   if (document.hidden) return;
   try {
     const neu = await laden(); geprueft = new Date();
-    if (neu.aktualisiert !== D.aktualisiert) {
-      const warAmEnde = S.bis === D.gespielt.at(-1);
-      D = neu; farbenVergeben(); bereichSelects();
-      if (warAmEnde) S.bis = D.gespielt.at(-1) ?? S.bis;
+    // Nur neuere Daten übernehmen: der Pages-Cache kann kurz einen älteren Stand liefern.
+    if (new Date(neu.aktualisiert) > new Date(D.aktualisiert)) {
+      D = neu; farbenVergeben();
+      if (!S.bisFix) S.bis = D.gespielt.at(-1) ?? S.bis;
+      bereichSelects();
       render();
     }
     standZeile();
@@ -821,7 +881,7 @@ async function start() {
   hashLesen(); bereichSelects();
   $('#view').onclick = (e) => { const v = e.target.closest('button')?.dataset.v; if (v) { S.view = v; render(); } };
   $('#von').onchange = (e) => { S.von = +e.target.value; render(); };
-  $('#bis').onchange = (e) => { S.bis = +e.target.value; render(); };
+  $('#bis').onchange = (e) => { S.bis = +e.target.value; S.bisFix = S.bis !== D.gespielt.at(-1); render(); };
   $('#d1').onchange = (e) => { S.d1 = e.target.value; render(); };
   $('#d2').onchange = (e) => { S.d2 = e.target.value; render(); };
   $('#prof-sel').onchange = (e) => { S.prof = e.target.value; render(); };
@@ -841,5 +901,137 @@ async function start() {
 }
 start();
 </script>
+<script>
+// ---------- Homescreen-Popup ----------
+(() => {
+  const KEY = 'kt-homescreen', SPAETER_TAGE = 3;
+  const lies = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (_) { return {}; } };
+  const merk = (o) => { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (_) {} };
+  const imRahmen = (() => { try { return window.self !== window.top; } catch (_) { return true; } })();
+  const installiert = () => matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
+
+  const ua = navigator.userAgent;
+  const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const ipad = /iPad/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const android = /Android/i.test(ua);
+  const inApp = /FBAN|FBAV|FB_IAB|Instagram|Line\/|Snapchat|TikTok|musical_ly|GSA\/|; wv\)/i.test(ua);
+  const samsung = /SamsungBrowser/i.test(ua), firefox = /Firefox|FxiOS/i.test(ua), edge = /Edg(e|A|iOS)?\//i.test(ua);
+  const iosChrome = /CriOS/i.test(ua), iosAndere = /FxiOS|EdgiOS|OPiOS/i.test(ua);
+  const macSafari = !ios && /Macintosh/.test(ua) && /Safari/.test(ua) && !/Chrome|Chromium|Edg|Firefox/.test(ua);
+  const mobil = ios || android;
+
+  const IC = {
+    teilen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>',
+    punkte: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
+    punkteQuer: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+    menue: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+    install: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 8v6M9 11l3 3 3-3M8 21h8"/></svg>',
+  };
+  const ic = (n) => `<span class="a2-ic">${IC[n]}</span>`;
+
+  // Schritte je Gerät und Browser. Inhalte sind fest im Code, keine Daten von außen.
+  function anleitung() {
+    if (inApp) return { steps: [
+      `Diese Seite ist gerade in einer App geöffnet (z. B. Instagram oder Facebook). Tippe dort auf ${ic('punkteQuer')} oder ${ic('teilen')}.`,
+      `Wähle <b>„Im Browser öffnen“</b> (${ios ? 'Safari' : 'Chrome'}).`,
+      'Dort erscheint dieser Hinweis wieder und führt dich weiter.'], hinweis: '' };
+    if (ios) {
+      const wo = iosChrome ? 'rechts in der Adressleiste' : iosAndere ? 'im Menü' : ipad ? 'oben rechts' : 'unten in der Leiste';
+      return { steps: [
+        `Tippe ${wo} auf <b>Teilen</b> ${ic('teilen')}.${!iosChrome && !iosAndere && !ipad ? ` Siehst du dort nur ${ic('punkteQuer')}, tippe zuerst darauf.` : ''}`,
+        `Wische nach unten und wähle <b>„Zum Home-Bildschirm“</b> ${ic('plus')}.`,
+        'Tippe oben rechts auf <b>„Hinzufügen“</b>. Fertig!'],
+        hinweis: iosChrome || iosAndere ? 'Klappt das nicht, öffne die Seite in Safari und versuch es dort.' : '', pfeil: !ipad && !iosChrome && !iosAndere };
+    }
+    if (android && samsung) return { steps: [
+      `Tippe unten rechts auf das <b>Menü</b> ${ic('menue')}.`,
+      'Wähle <b>„Seite hinzufügen zu“</b> und dann <b>„Startbildschirm“</b>.',
+      'Bestätige mit <b>„Hinzufügen“</b>.'], hinweis: '' };
+    if (android && firefox) return { steps: [
+      `Tippe auf das <b>Menü</b> ${ic('punkte')}.`,
+      'Wähle <b>„Installieren“</b> bzw. <b>„Zum Startbildschirm hinzufügen“</b>.',
+      'Bestätige mit <b>„Hinzufügen“</b>.'], hinweis: '' };
+    if (android) return { steps: [
+      `Tippe oben rechts auf das <b>Menü</b> ${ic('punkte')}.`,
+      'Wähle <b>„App installieren“</b> oder <b>„Zum Startbildschirm hinzufügen“</b>.',
+      'Bestätige mit <b>„Installieren“</b>.'], hinweis: '' };
+    if (macSafari) return { steps: [
+      'Klicke oben in der Menüleiste auf <b>„Ablage“</b>.',
+      'Wähle <b>„Zum Dock hinzufügen …“</b> und dann <b>„Hinzufügen“</b>.'], hinweis: 'Geht ab macOS Sonoma (Safari 17).' };
+    if (firefox) return { steps: [
+      'Firefox am Computer kann Seiten nicht als App installieren.',
+      'Leg dir stattdessen ein Lesezeichen an: <b>Strg + D</b> (Mac: <b>⌘ + D</b>).'], hinweis: 'Mit Chrome oder Edge geht es als echte App.' };
+    if (edge) return { steps: [
+      `Klicke oben rechts auf ${ic('punkteQuer')}.`,
+      'Wähle <b>„Apps“</b> und dann <b>„Diese Website als App installieren“</b>.'], hinweis: '' };
+    return { steps: [
+      `Klicke rechts in der Adressleiste auf das <b>Installieren-Symbol</b> ${ic('install')}.`,
+      `Oder: Menü ${ic('punkte')} → <b>„Streamen, speichern und teilen“</b> → <b>„Seite als App installieren“</b>.`], hinweis: '' };
+  }
+
+  let bip = null; // Androids/Chromes eigener Installationsdialog, falls angeboten
+  addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); bip = e; });
+  addEventListener('appinstalled', () => { merk({ ...lies(), installiert: true }); zu(); });
+
+  const el = (id) => document.getElementById(id);
+  let pfeil = null;
+  function zeigeStart() {
+    el('a2-steps').hidden = true; el('a2-hinweis').hidden = true;
+    el('a2-text').hidden = false; el('a2-knoepfe').hidden = false; el('a2-nie').hidden = false;
+    el('a2-ja').textContent = 'Ja, hinzufügen'; el('a2-spaeter').textContent = 'Später';
+  }
+  function auf() {
+    zeigeStart();
+    const a = el('a2'); a.hidden = false; requestAnimationFrame(() => a.classList.add('auf'));
+    el('a2-ja').focus({ preventScroll: true });
+  }
+  function zu() {
+    const a = el('a2'); a.classList.remove('auf'); setTimeout(() => (a.hidden = true), 200);
+    pfeil?.remove(); pfeil = null;
+  }
+  function zeigeAnleitung() {
+    const A = anleitung();
+    const ol = el('a2-steps'); ol.innerHTML = A.steps.map((s) => `<li><span>${s}</span></li>`).join(''); ol.hidden = false;
+    el('a2-text').hidden = true;
+    const h = el('a2-hinweis'); h.textContent = A.hinweis; h.hidden = !A.hinweis;
+    el('a2-ja').textContent = 'Verstanden'; el('a2-spaeter').textContent = 'Später';
+    el('a2-ja').onclick = () => { merk({ ...lies(), gezeigt: Date.now() }); zu(); };
+    if (A.pfeil && !pfeil) { pfeil = document.createElement('div'); pfeil.className = 'a2-pfeil'; pfeil.textContent = '↓'; document.body.append(pfeil); }
+  }
+  async function ja() {
+    if (bip) {
+      const p = bip; bip = null;
+      try { p.prompt(); const r = await p.userChoice; if (r.outcome === 'accepted') { merk({ ...lies(), installiert: true }); zu(); return; } } catch (_) {}
+      zu(); return;
+    }
+    zeigeAnleitung();
+  }
+
+  function init() {
+    el('a2-ja').onclick = ja;
+    el('a2-spaeter').onclick = () => { merk({ ...lies(), spaeter: Date.now() }); zu(); };
+    el('a2-nie').onclick = () => { merk({ ...lies(), nie: true }); zu(); };
+    el('a2').addEventListener('click', (e) => { if (e.target.id === 'a2') { merk({ ...lies(), spaeter: Date.now() }); zu(); } });
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && !el('a2').hidden) zu(); });
+    const link = el('a2-link');
+    if (installiert() || imRahmen) { el('a2-link-wrap')?.remove(); return; }
+    link.onclick = () => { auf(); el('a2-ja').onclick = ja; };
+
+    // Automatisch nur einmal pro Besuch, nicht nach „Nicht mehr anzeigen“ und frühestens 3 Tage nach „Später“.
+    const z = lies();
+    if (z.nie || z.installiert) return;
+    if (z.spaeter && Date.now() - z.spaeter < SPAETER_TAGE * 864e5) return;
+    if (!mobil && !bip && firefox) return; // Firefox am Computer kann es nicht
+    try { if (sessionStorage.getItem(KEY)) return; sessionStorage.setItem(KEY, '1'); } catch (_) {}
+    setTimeout(() => { if (el('a2').hidden && !installiert()) auf(); }, 6000);
+  }
+
+  if (!imRahmen && 'serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+  init();
+})();
+</script>
 </body>
 </html>
+
+</body></html>
