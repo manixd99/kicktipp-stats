@@ -166,6 +166,18 @@ tbody tr:hover td { background: rgba(255,255,255,.025); }
 .tl .val { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
 .sub { color: var(--muted); font-size: 12px; font-weight: 500; }
 footer { color: var(--dim); font-size: 12px; margin-top: 28px; text-align: center; }
+/* „Wer bist du?“ */
+.ich-zeile { margin: -4px 0 14px; padding: 11px 14px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--gold) 35%, var(--line2)); background: linear-gradient(90deg, color-mix(in srgb, var(--gold) 12%, var(--panel)), var(--panel)); font-size: 14px; line-height: 1.45; }
+.ich-zeile b { color: var(--gold); }
+.chip.ich { box-shadow: 0 0 0 2px var(--gold); }
+tbody tr.ich td { background: color-mix(in srgb, var(--gold) 9%, transparent); }
+tbody tr.ich .who > span::after { content: " · du"; color: var(--gold); font-weight: 600; }
+.ich-wahl { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin: 16px 0 6px; max-height: 46vh; overflow-y: auto; }
+.ich-wahl button { font: inherit; font-size: 14.5px; font-weight: 600; text-align: left; display: flex; align-items: center; gap: 8px; padding: 10px 11px; border-radius: 12px; border: 1px solid var(--line2); background: rgba(255,255,255,.03); color: var(--fg); cursor: pointer; overflow: hidden; }
+.ich-wahl button i { flex: none; width: 10px; height: 10px; border-radius: 50%; }
+.ich-wahl button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ich-wahl button:hover, .ich-wahl button:focus-visible { border-color: var(--gold); outline: none; }
+footer .ich-link { font: inherit; font-size: 12px; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
 footer a { color: var(--muted); }
 .err { background: var(--panel); border: 1px solid var(--bad); color: var(--bad); padding: 16px; border-radius: 14px; margin-top: 16px; display: none; }
 
@@ -215,6 +227,7 @@ footer .a2-link { font: inherit; font-size: 12px; color: var(--muted); backgroun
   </header>
   <div class="err" id="err"></div>
 
+  <div class="ich-zeile" id="ich-zeile" hidden></div>
   <div class="podium" id="podium"></div>
   <div class="tiles" id="tiles"></div>
 
@@ -292,9 +305,20 @@ footer .a2-link { font: inherit; font-size: 12px; color: var(--muted); backgroun
     <div class="scroll"><table id="tab"></table></div>
   </div>
 
-  <footer>Daten: <a id="src" href="#" target="_blank" rel="noopener">kicktipp.de</a> · an Spieltagen alle paar Minuten aktualisiert, auch während der Spiele<span id="a2-link-wrap"> · <button type="button" class="a2-link" id="a2-link">Als App auf den Homescreen</button></span></footer>
+  <footer>Daten: <a id="src" href="#" target="_blank" rel="noopener">kicktipp.de</a> · an Spieltagen alle paar Minuten aktualisiert, auch während der Spiele<span id="ich-link-wrap" hidden> · <button type="button" class="ich-link" id="ich-link"></button></span><span id="a2-link-wrap"> · <button type="button" class="a2-link" id="a2-link">Als App auf den Homescreen</button></span></footer>
 </div>
 
+<div class="a2" id="ich" hidden role="dialog" aria-modal="true" aria-labelledby="ich-titel">
+  <div class="a2-box">
+    <div class="a2-kopf">
+      <img src="icon-192.png?v=3" alt="">
+      <div><h3 id="ich-titel">Wer bist du?</h3><p>Dann wird deine Linie überall hervorgehoben und du siehst gleich deinen Stand.</p></div>
+    </div>
+    <div class="ich-wahl" id="ich-wahl"></div>
+    <p class="a2-hinweis">Deine Auswahl wird mitgezählt, damit man sieht, wer aus der Runde reinschaut. Ändern kannst du sie jederzeit ganz unten.</p>
+    <button type="button" class="a2-nie" id="ich-nein">Lieber anonym bleiben</button>
+  </div>
+</div>
 <div class="a2" id="a2" hidden role="dialog" aria-modal="true" aria-labelledby="a2-titel">
   <div class="a2-box">
     <div class="a2-kopf">
@@ -481,7 +505,7 @@ function kopf(R) {
 function chips(R) {
   $('#chips').replaceChildren(...R.P.map((p) => {
     const n = p.name, b = document.createElement('button'), on = S.sel.includes(n);
-    b.className = 'chip' + (on ? ' on' : ''); b.style.setProperty('--c', FARBE[n]);
+    b.className = 'chip' + (on ? ' on' : '') + (n === ichName() ? ' ich' : ''); b.style.setProperty('--c', FARBE[n]);
     const i = document.createElement('i'); i.textContent = p.rang; b.append(i, document.createTextNode(n));
     b.onclick = () => { on ? S.sel.splice(S.sel.indexOf(n), 1) : S.sel.push(n); render(); };
     return b;
@@ -506,7 +530,7 @@ function hauptChart(R) {
   };
   const ds = [
     ...sel.map((p) => ({ label: p.name, _label: S.view === 'tag' ? p.name : lab(p), data: p[key], borderColor: FARBE[p.name], backgroundColor: FARBE[p.name],
-      pointBackgroundColor: FARBE[p.name], pointBorderColor: '#0f1630', pointBorderWidth: 2, borderWidth: S.view === 'tag' ? 0 : 3, pointRadius: R.idx.length < 14 ? 4 : 0, pointHoverRadius: 6,
+      pointBackgroundColor: FARBE[p.name], pointBorderColor: '#0f1630', pointBorderWidth: 2, borderWidth: S.view === 'tag' ? 0 : p.name === ichName() ? 5 : 3, pointRadius: R.idx.length < 14 ? 4 : 0, pointHoverRadius: 6,
       tension: 0, order: 0, borderRadius: 6, borderSkipped: 'start', maxBarThickness: 34, categoryPercentage: 0.8, barPercentage: 0.92 })),
     ...rest.map((p) => ({ label: p.name, data: p[key], borderColor: 'rgba(142,152,184,.22)', borderWidth: 1.5, pointRadius: 0, pointHoverRadius: 0, tension: 0, order: 1, _muted: true })),
   ];
@@ -598,7 +622,7 @@ function tabelle(R) {
   });
   const tb = t.createTBody();
   rows.forEach((p) => {
-    const tr = tb.insertRow();
+    const tr = tb.insertRow(); if (p.name === ichName()) tr.className = 'ich';
     const cell = (cls) => { const td = tr.insertCell(); if (cls) td.className = cls; return td; };
     const rk = document.createElement('span'); rk.className = 'rk ' + ({ 1: 'g', 2: 's', 3: 'b' }[p.rang] || ''); rk.textContent = p.rang; cell().append(rk);
     const who = cell(); who.innerHTML = '<span class="who"><i></i><span></span></span>';
@@ -827,6 +851,61 @@ function hashLesen() {
   if (p.get('d')) [S.d1, S.d2] = p.get('d').split('|');
 }
 
+// ---------- „Wer bist du?“ + Besucherstatistik ----------
+// GoatCounter-Code (Name bei goatcounter.com). Leer = keine Statistik.
+const GC_CODE = 'manixd99';
+const ICH_KEY = 'kt-ich';
+let ICH = (() => { try { return localStorage.getItem(ICH_KEY) || ''; } catch (_) { return ''; } })();
+const ichName = () => (ICH && ICH !== '-' && D?.spieler.some((p) => p.name === ICH) ? ICH : '');
+function gcZaehle(pfad, titel) {
+  if (!GC_CODE) return;
+  const los = () => { try { window.goatcounter.count({ path: pfad, title: titel, event: true }); } catch (_) {} };
+  let n = 0; const warte = () => { if (window.goatcounter?.count) los(); else if (n++ < 40) setTimeout(warte, 250); }; warte();
+}
+function gcLaden() {
+  if (!GC_CODE || window.self !== window.top) return;
+  const sc = document.createElement('script'); sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
+  sc.dataset.goatcounter = `https://${GC_CODE}.goatcounter.com/count`; document.head.append(sc);
+}
+function ichSetzen(name) {
+  ICH = name; try { localStorage.setItem(ICH_KEY, name); } catch (_) {}
+  const n = ichName();
+  if (n) {
+    if (!S.sel.includes(n)) S.sel.push(n);
+    S.prof = n; S.d1 = n;
+    gcZaehle('ich/' + n, 'Ich bin ' + n);
+  }
+  render();
+}
+function ichDialog() {
+  const d = $('#ich'), w = $('#ich-wahl');
+  w.replaceChildren(...[...D.spieler].sort((a, b) => a.name.localeCompare(b.name, 'de')).map((p) => {
+    const b = document.createElement('button'); b.type = 'button';
+    const i = document.createElement('i'); i.style.background = FARBE[p.name];
+    const sp = document.createElement('span'); sp.textContent = p.name;
+    b.append(i, sp); b.onclick = () => { zu(); ichSetzen(p.name); };
+    return b;
+  }));
+  const zu = () => { d.classList.remove('auf'); setTimeout(() => (d.hidden = true), 200); };
+  $('#ich-nein').onclick = () => { zu(); ichSetzen('-'); };
+  d.onclick = (e) => { if (e.target === d) zu(); };
+  d.hidden = false; requestAnimationFrame(() => d.classList.add('auf'));
+}
+function ichZeile(R) {
+  const n = ichName(), z = $('#ich-zeile');
+  $('#ich-link-wrap').hidden = false;
+  $('#ich-link').textContent = n ? `Du bist ${n} · ändern` : 'Wer bist du?';
+  const p = n && R.P.find((q) => q.name === n);
+  if (!p) { z.hidden = true; return; }
+  const k = R.idx.length - 1, pos = (v) => `<b>Platz ${v}</b>`;
+  const vorher = p.platz.length > 1 ? p.platz.at(-2) : null, dt = vorher ? vorher - p.platz.at(-1) : 0;
+  const bew = dt > 0 ? `, ${dt} ${dt === 1 ? 'Platz' : 'Plätze'} rauf` : dt < 0 ? `, ${-dt} ${dt === -1 ? 'Platz' : 'Plätze'} runter` : '';
+  const vor = R.P.filter((q) => q.summe > p.summe).at(-1);
+  const abst = p.rueckstand ? ` · ${p.rueckstand} hinter der Spitze` + (vor && vor.summe - p.summe !== p.rueckstand ? `, ${vor.summe - p.summe} hinter ${vor.name}` : '') : ' · du führst!';
+  z.innerHTML = `Hallo <b></b>: ${pos(p.platz.at(-1))} mit ${p.summe} Punkten${bew}${abst}. Am letzten Spieltag: ${p.tage[k] ?? 0} Punkte.`;
+  z.querySelector('b').textContent = n; z.hidden = false;
+}
+
 function render() {
   if (!S.bisFix) S.bis = D.gespielt.at(-1) ?? S.bis;
   if (S.von > S.bis) [S.von, S.bis] = [S.bis, S.von];
@@ -834,7 +913,7 @@ function render() {
   $('#von').value = S.von; $('#bis').value = S.bis;
   document.querySelectorAll('#view button').forEach((b) => b.classList.toggle('on', b.dataset.v === S.view));
   const R = berechne();
-  kopf(R); chips(R); hauptChart(R); tippTeil(R); duell(R); heat(R); tabelle(R); hashSchreiben();
+  kopf(R); ichZeile(R); chips(R); hauptChart(R); tippTeil(R); duell(R); heat(R); tabelle(R); hashSchreiben();
 }
 
 // ---------- Daten: direkt aus dem Repository (umgeht den ~10-Minuten-Cache von GitHub Pages) ----------
@@ -878,7 +957,13 @@ async function start() {
   farbenVergeben();
   S.von = D.gespielt[0] ?? 0; S.bis = D.gespielt.at(-1) ?? 0;
   S.sel = [...D.spieler].sort((a, b) => b.gesamt - a.gesamt).slice(0, 3).map((p) => p.name);
+  const startHash = location.hash;
   hashLesen(); bereichSelects();
+  { const n = ichName(); if (n) { if (!startHash.includes('s=') && !S.sel.includes(n)) S.sel.push(n); S.prof = n; S.d1 = n; } }
+  $('#ich-link').onclick = ichDialog;
+  gcLaden();
+  try { if (!sessionStorage.getItem('kt-besuch')) { sessionStorage.setItem('kt-besuch', '1'); gcZaehle('besuch/' + (ichName() || 'anonym'), 'Besuch: ' + (ichName() || 'anonym')); } } catch (_) {}
+  if (!ICH && window.self === window.top) setTimeout(() => { if ($('#a2').hidden) ichDialog(); }, 1500);
   $('#view').onclick = (e) => { const v = e.target.closest('button')?.dataset.v; if (v) { S.view = v; render(); } };
   $('#von').onchange = (e) => { S.von = +e.target.value; render(); };
   $('#bis').onchange = (e) => { S.bis = +e.target.value; S.bisFix = S.bis !== D.gespielt.at(-1); render(); };
@@ -1024,7 +1109,7 @@ start();
     if (z.spaeter && Date.now() - z.spaeter < SPAETER_TAGE * 864e5) return;
     if (!mobil && !bip && firefox) return; // Firefox am Computer kann es nicht
     try { if (sessionStorage.getItem(KEY)) return; sessionStorage.setItem(KEY, '1'); } catch (_) {}
-    setTimeout(() => { if (el('a2').hidden && !installiert()) auf(); }, 6000);
+    setTimeout(() => { if (el('a2').hidden && el('ich').hidden && !installiert()) auf(); }, 6000);
   }
 
   if (!imRahmen && 'serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
